@@ -1,0 +1,20 @@
+# dependencies and build outputs
+node_modules/
+dist/
+out/
+*.log
+
+# test outputs and private real-data samples (never commit chat content)
+test/output/
+test/private-fixtures/
+test/fixtures/large/
+
+# planning notes and the local privacy deny list (private terms, never published)
+docs/
+.privacy-denylist
+
+# local-only agent/operator files
+DEVELOPMENT_LOG.md
+CLAUDE.local.md
+AGENTS.md
+.claude/

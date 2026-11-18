@@ -1,0 +1,22 @@
+{
+  "name": "@mdv/web",
+  "productName": "MD Viewer Web",
+  "version": "1.0.0",
+  "description": "Web edition of MD Viewer for a NAS or server: browse, search and read Markdown folders and chat archives in the browser",
+  "private": true,
+  "type": "module",
+  "main": "src/server/main.js",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "node src/server/main.js",
+    "test": "node --test --test-reporter=spec \"test/*.test.mjs\"",
+    "smoke:container": "node test/container-smoke.mjs"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^12.4.1",
+    "github-slugger": "^2.0.0",
+    "iconv-lite": "^0.7.3",
+    "sharp": "^0.35.5"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "@mdv/core",
+  "version": "1.0.0",
+  "description": "Shared part of MD Viewer: Markdown rendering, the chat record format, path and link rules, text encodings and the reading UI",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "dependencies": {
+    "iconv-lite": "^0.7.3"
+  }
+}

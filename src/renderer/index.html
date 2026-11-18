@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' mdvfile: https: http: data: blob:; media-src 'self' mdvfile: https: http: data: blob:; font-src 'self' data:; connect-src 'self' mdvfile:; object-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <title>MD Viewer</title>
+    <link rel="stylesheet" href="app.css" />
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div id="topbar">
+        <div id="nav-buttons">
+          <button class="icon-btn" id="btn-back" title="后退 (Alt+←)">←</button>
+          <button class="icon-btn" id="btn-forward" title="前进 (Alt+→)">→</button>
+          <button class="icon-btn" id="btn-sidebar" title="文件夹目录 (Ctrl+B)">☰</button>
+        </div>
+        <div id="tabstrip"></div>
+        <button class="icon-btn" id="btn-open" title="打开文件 (Ctrl+O)">＋</button>
+      </div>
+      <div id="toolbar">
+        <div id="breadcrumb"></div>
+        <div id="tool-buttons">
+          <button class="chip save" id="btn-save" title="保存 (Ctrl+S)" style="display: none">保存</button>
+          <div class="seg" id="mode-seg" style="display: none">
+            <button data-mode="view" title="阅读 (Ctrl+E 在阅读和编辑之间切换)">阅读</button>
+            <button data-mode="edit" title="只显示源文本">编辑</button>
+            <button data-mode="split" title="源文本和预览并排 (Ctrl+Shift+E)">并排</button>
+          </div>
+          <button class="chip" id="btn-chatview" title="切换聊天视图 / 原文 (Ctrl+Shift+M)">聊天视图</button>
+          <button class="chip" id="btn-width" title="宽版阅读 (Ctrl+Shift+W)">宽版</button>
+          <button class="icon-btn" id="btn-find" title="查找 (Ctrl+F)">🔍</button>
+          <button class="icon-btn" id="btn-outline" title="大纲 (Ctrl+Shift+B)">≡</button>
+        </div>
+      </div>
+      <div id="workspace">
+        <aside id="sidebar" class="pane"></aside>
+        <div class="resizer" data-for="sidebar"></div>
+        <main id="center">
+          <div id="findbar-host"></div>
+          <div id="docs">
+            <div id="welcome"></div>
+          </div>
+        </main>
+        <div class="resizer" data-for="peek"></div>
+        <aside id="peek" class="pane"></aside>
+        <div class="resizer" data-for="outline"></div>
+        <aside id="outline" class="pane"></aside>
+      </div>
+      <footer id="statusbar">
+        <span id="status-left"></span>
+        <span id="status-right"></span>
+      </footer>
+    </div>
+    <div id="drop-overlay">松开以打开</div>
+  </body>
+</html>

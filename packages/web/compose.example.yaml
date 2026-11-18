@@ -1,0 +1,36 @@
+# Example deployment. Replace every <…> with your own values; nothing here is a default.
+# Each folder mapped to /roots/<name> becomes one root in the tree.
+services:
+  mdview:
+    image: mdview-web:1.0.0
+    container_name: mdview-web
+    ports:
+      - "<host port>:8080"
+    environment:
+      MDV_AUTH: "off"                 # "on" to require a password (set MDV_PASSWORD_HASH, or use the setup code printed in the log)
+      # MDV_PASSWORD_HASH: "<output of: docker run --rm -i mdview-web:1.0.0 node packages/web/src/server/hash-password.js>"
+      # MDV_PUBLIC_URL: "<https address when reached through a tunnel or reverse proxy>"
+      # MDV_TRUSTED_PROXY: "<address of that proxy, to read X-Forwarded-For>"
+      # MDV_WRITABLE_ROOTS: "<root names allowed to be overwritten, comma separated; the volume must also be read-write>"
+      # MDV_DISABLE_WRITE: "1"        # turn every overwrite off
+      # MDV_RECHECK_IDLE_HOURS: "24"  # re-check the index on the first visit after this many idle hours; 0 = only at start
+      # MDV_INDEX_SCHEDULE: "off"     # also check on a schedule: daily@HH:MM (in TZ) or every:<n>h
+      # TZ: "<time zone for daily@, in the tz database form>"
+      # MDV_THUMB_CACHE_GB: "10"      # thumbnail cache limit; the least recently viewed go first; 0 = no thumbnails
+    volumes:
+      # Folders that link to each other with relative paths keep their own names, as roots or under one root.
+      - <folder to browse>:/roots/<name>:ro
+      - <folder for the index and settings>:/state
+      - <folder for thumbnails and converted videos, outside every folder above>:/cache
+    # Optional: hardware video transcoding (Intel Quick Sync / VAAPI). Without it, software transcoding is used.
+    # devices:
+    #   - /dev/dri:/dev/dri
+    # group_add:
+    #   - "<gid that owns /dev/dri/renderD128 on the host>"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped

@@ -1,0 +1,552 @@
+{
+ "outDir": "test/output/selftest-edit",
+ "steps": [
+  {
+   "name": "theme-light",
+   "do": "setTheme",
+   "theme": "light"
+  },
+  {
+   "name": "write-gb",
+   "do": "writeFile",
+   "path": "${tmp}\\edit\\gb.md",
+   "base64": "IyCx4LytsuLK1A0KDQq12tK7ts6jusa7ufuhow0KDQojIyC12rb+vdoNCg0KxNrI3Q0KDQojIyDQob3aIDENCg0KtdogMSC2ztX9zsShow0KDQojIyDQob3aIDINCg0KtdogMiC2ztX9zsShow0KDQojIyDQob3aIDMNCg0KtdogMyC2ztX9zsShow0KDQojIyDQob3aIDQNCg0KtdogNCC2ztX9zsShow0KDQojIyDQob3aIDUNCg0KtdogNSC2ztX9zsShow0KDQojIyDQob3aIDYNCg0KtdogNiC2ztX9zsShow0KDQojIyDQob3aIDcNCg0KtdogNyC2ztX9zsShow0KDQojIyDQob3aIDgNCg0KtdogOCC2ztX9zsShow0KDQojIyDQob3aIDkNCg0KtdogOSC2ztX9zsShow0KDQojIyDQob3aIDEwDQoNCrXaIDEwILbO1f3OxKGjDQoNCiMjINChvdogMTENCg0KtdogMTEgts7V/c7EoaMNCg0KIyMg0KG92iAxMg0KDQq12iAxMiC2ztX9zsShow0KDQojIyDQob3aIDEzDQoNCrXaIDEzILbO1f3OxKGjDQoNCiMjINChvdogMTQNCg0KtdogMTQgts7V/c7EoaMNCg0KIyMg0KG92iAxNQ0KDQq12iAxNSC2ztX9zsShow0KDQojIyDQob3aIDE2DQoNCrXaIDE2ILbO1f3OxKGjDQoNCiMjINChvdogMTcNCg0KtdogMTcgts7V/c7EoaMNCg0KIyMg0KG92iAxOA0KDQq12iAxOCC2ztX9zsShow0KDQojIyDQob3aIDE5DQoNCrXaIDE5ILbO1f3OxKGjDQoNCiMjINChvdogMjANCg0KtdogMjAgts7V/c7EoaMNCg0KIyMg0KG92iAyMQ0KDQq12iAyMSC2ztX9zsShow0KDQojIyDQob3aIDIyDQoNCrXaIDIyILbO1f3OxKGjDQoNCiMjINChvdogMjMNCg0KtdogMjMgts7V/c7EoaMNCg0KIyMg0KG92iAyNA0KDQq12iAyNCC2ztX9zsShow0KDQojIyDQob3aIDI1DQoNCrXaIDI1ILbO1f3OxKGjDQoNCiMjINChvdogMjYNCg0KtdogMjYgts7V/c7EoaMNCg0KIyMg0KG92iAyNw0KDQq12iAyNyC2ztX9zsShow0KDQojIyDQob3aIDI4DQoNCrXaIDI4ILbO1f3OxKGjDQoNCiMjINChvdogMjkNCg0KtdogMjkgts7V/c7EoaMNCg0KIyMg0KG92iAzMA0KDQq12iAzMCC2ztX9zsShow0KDQojIyDQob3aIDMxDQoNCrXaIDMxILbO1f3OxKGjDQoNCiMjINChvdogMzINCg0KtdogMzIgts7V/c7EoaMNCg0KIyMg0KG92iAzMw0KDQq12iAzMyC2ztX9zsShow0KDQojIyDQob3aIDM0DQoNCrXaIDM0ILbO1f3OxKGjDQoNCiMjINChvdogMzUNCg0KtdogMzUgts7V/c7EoaMNCg0KIyMg0KG92iAzNg0KDQq12iAzNiC2ztX9zsShow0KDQojIyDQob3aIDM3DQoNCrXaIDM3ILbO1f3OxKGjDQoNCiMjINChvdogMzgNCg0KtdogMzggts7V/c7EoaMNCg0KIyMg0KG92iAzOQ0KDQq12iAzOSC2ztX9zsShow0KDQojIyDQob3aIDQwDQoNCrXaIDQwILbO1f3OxKGjDQoNCiMjINChvdogNDENCg0KtdogNDEgts7V/c7EoaMNCg0KIyMg0KG92iA0Mg0KDQq12iA0MiC2ztX9zsShow0KDQojIyDQob3aIDQzDQoNCrXaIDQzILbO1f3OxKGjDQoNCiMjINChvdogNDQNCg0KtdogNDQgts7V/c7EoaMNCg0KIyMg0KG92iA0NQ0KDQq12iA0NSC2ztX9zsShow0KDQojIyDQob3aIDQ2DQoNCrXaIDQ2ILbO1f3OxKGjDQoNCiMjINChvdogNDcNCg0KtdogNDcgts7V/c7EoaMNCg0KIyMg0KG92iA0OA0KDQq12iA0OCC2ztX9zsShow0KDQojIyDQob3aIDQ5DQoNCrXaIDQ5ILbO1f3OxKGjDQoNCiMjINChvdogNTANCg0KtdogNTAgts7V/c7EoaMNCg0KIyMg0KG92iA1MQ0KDQq12iA1MSC2ztX9zsShow0KDQojIyDQob3aIDUyDQoNCrXaIDUyILbO1f3OxKGjDQoNCiMjINChvdogNTMNCg0KtdogNTMgts7V/c7EoaMNCg0KIyMg0KG92iA1NA0KDQq12iA1NCC2ztX9zsShow0KDQojIyDQob3aIDU1DQoNCrXaIDU1ILbO1f3OxKGjDQoNCiMjINChvdogNTYNCg0KtdogNTYgts7V/c7EoaMNCg0KIyMg0KG92iA1Nw0KDQq12iA1NyC2ztX9zsShow0KDQojIyDQob3aIDU4DQoNCrXaIDU4ILbO1f3OxKGjDQoNCiMjINChvdogNTkNCg0KtdogNTkgts7V/c7EoaMNCg0KIyMg0KG92iA2MA0KDQq12iA2MCC2ztX9zsShow0K"
+  },
+  {
+   "name": "write-other",
+   "do": "writeFile",
+   "path": "${tmp}\\edit\\other.md",
+   "content": "# 另一个文件\n"
+  },
+  {
+   "name": "write-bom",
+   "do": "writeFile",
+   "path": "${tmp}\\edit\\bom.md",
+   "base64": "77u/IyBCT00g5paH5Lu2CgrkuIDooYwK"
+  },
+  {
+   "name": "open-gb",
+   "do": "open",
+   "path": "${tmp}\\edit\\gb.md",
+   "expect": {
+    "view.meta.encoding": "GB18030",
+    "view.meta.eol": "CRLF"
+   }
+  },
+  {
+   "name": "split",
+   "do": "mode",
+   "mode": "split",
+   "expect": {
+    "mode": "split",
+    "editorVisible": true,
+    "previewVisible": true,
+    "dirty": false
+   },
+   "screenshot": true
+  },
+  {
+   "name": "edit-dirty",
+   "do": "edit",
+   "replace": "内容",
+   "with": "内容（已修改）",
+   "expect": {
+    "dirty": true,
+    "tabDirty": true,
+    "saveButton": true,
+    "title": {
+     "includes": "●"
+    },
+    "status": {
+     "includes": "未保存"
+    }
+   }
+  },
+  {
+   "name": "live-preview",
+   "do": "wait",
+   "ms": 900
+  },
+  {
+   "name": "live-preview-check",
+   "do": "editState",
+   "find": "内容（已修改）",
+   "expect": {
+    "previewHas": true
+   }
+  },
+  {
+   "name": "save",
+   "do": "save",
+   "expect": {
+    "saved": true,
+    "dirty": false,
+    "tabDirty": false,
+    "saveButton": false
+   }
+  },
+  {
+   "name": "saved-bytes",
+   "do": "readFile",
+   "path": "${tmp}\\edit\\gb.md",
+   "expect": {
+    "base64": "IyCx4LytsuLK1A0KDQq12tK7ts6jusa7ufuhow0KDQojIyC12rb+vdoNCg0KxNrI3aOo0tHQ3rjEo6kNCg0KIyMg0KG92iAxDQoNCrXaIDEgts7V/c7EoaMNCg0KIyMg0KG92iAyDQoNCrXaIDIgts7V/c7EoaMNCg0KIyMg0KG92iAzDQoNCrXaIDMgts7V/c7EoaMNCg0KIyMg0KG92iA0DQoNCrXaIDQgts7V/c7EoaMNCg0KIyMg0KG92iA1DQoNCrXaIDUgts7V/c7EoaMNCg0KIyMg0KG92iA2DQoNCrXaIDYgts7V/c7EoaMNCg0KIyMg0KG92iA3DQoNCrXaIDcgts7V/c7EoaMNCg0KIyMg0KG92iA4DQoNCrXaIDggts7V/c7EoaMNCg0KIyMg0KG92iA5DQoNCrXaIDkgts7V/c7EoaMNCg0KIyMg0KG92iAxMA0KDQq12iAxMCC2ztX9zsShow0KDQojIyDQob3aIDExDQoNCrXaIDExILbO1f3OxKGjDQoNCiMjINChvdogMTINCg0KtdogMTIgts7V/c7EoaMNCg0KIyMg0KG92iAxMw0KDQq12iAxMyC2ztX9zsShow0KDQojIyDQob3aIDE0DQoNCrXaIDE0ILbO1f3OxKGjDQoNCiMjINChvdogMTUNCg0KtdogMTUgts7V/c7EoaMNCg0KIyMg0KG92iAxNg0KDQq12iAxNiC2ztX9zsShow0KDQojIyDQob3aIDE3DQoNCrXaIDE3ILbO1f3OxKGjDQoNCiMjINChvdogMTgNCg0KtdogMTggts7V/c7EoaMNCg0KIyMg0KG92iAxOQ0KDQq12iAxOSC2ztX9zsShow0KDQojIyDQob3aIDIwDQoNCrXaIDIwILbO1f3OxKGjDQoNCiMjINChvdogMjENCg0KtdogMjEgts7V/c7EoaMNCg0KIyMg0KG92iAyMg0KDQq12iAyMiC2ztX9zsShow0KDQojIyDQob3aIDIzDQoNCrXaIDIzILbO1f3OxKGjDQoNCiMjINChvdogMjQNCg0KtdogMjQgts7V/c7EoaMNCg0KIyMg0KG92iAyNQ0KDQq12iAyNSC2ztX9zsShow0KDQojIyDQob3aIDI2DQoNCrXaIDI2ILbO1f3OxKGjDQoNCiMjINChvdogMjcNCg0KtdogMjcgts7V/c7EoaMNCg0KIyMg0KG92iAyOA0KDQq12iAyOCC2ztX9zsShow0KDQojIyDQob3aIDI5DQoNCrXaIDI5ILbO1f3OxKGjDQoNCiMjINChvdogMzANCg0KtdogMzAgts7V/c7EoaMNCg0KIyMg0KG92iAzMQ0KDQq12iAzMSC2ztX9zsShow0KDQojIyDQob3aIDMyDQoNCrXaIDMyILbO1f3OxKGjDQoNCiMjINChvdogMzMNCg0KtdogMzMgts7V/c7EoaMNCg0KIyMg0KG92iAzNA0KDQq12iAzNCC2ztX9zsShow0KDQojIyDQob3aIDM1DQoNCrXaIDM1ILbO1f3OxKGjDQoNCiMjINChvdogMzYNCg0KtdogMzYgts7V/c7EoaMNCg0KIyMg0KG92iAzNw0KDQq12iAzNyC2ztX9zsShow0KDQojIyDQob3aIDM4DQoNCrXaIDM4ILbO1f3OxKGjDQoNCiMjINChvdogMzkNCg0KtdogMzkgts7V/c7EoaMNCg0KIyMg0KG92iA0MA0KDQq12iA0MCC2ztX9zsShow0KDQojIyDQob3aIDQxDQoNCrXaIDQxILbO1f3OxKGjDQoNCiMjINChvdogNDINCg0KtdogNDIgts7V/c7EoaMNCg0KIyMg0KG92iA0Mw0KDQq12iA0MyC2ztX9zsShow0KDQojIyDQob3aIDQ0DQoNCrXaIDQ0ILbO1f3OxKGjDQoNCiMjINChvdogNDUNCg0KtdogNDUgts7V/c7EoaMNCg0KIyMg0KG92iA0Ng0KDQq12iA0NiC2ztX9zsShow0KDQojIyDQob3aIDQ3DQoNCrXaIDQ3ILbO1f3OxKGjDQoNCiMjINChvdogNDgNCg0KtdogNDggts7V/c7EoaMNCg0KIyMg0KG92iA0OQ0KDQq12iA0OSC2ztX9zsShow0KDQojIyDQob3aIDUwDQoNCrXaIDUwILbO1f3OxKGjDQoNCiMjINChvdogNTENCg0KtdogNTEgts7V/c7EoaMNCg0KIyMg0KG92iA1Mg0KDQq12iA1MiC2ztX9zsShow0KDQojIyDQob3aIDUzDQoNCrXaIDUzILbO1f3OxKGjDQoNCiMjINChvdogNTQNCg0KtdogNTQgts7V/c7EoaMNCg0KIyMg0KG92iA1NQ0KDQq12iA1NSC2ztX9zsShow0KDQojIyDQob3aIDU2DQoNCrXaIDU2ILbO1f3OxKGjDQoNCiMjINChvdogNTcNCg0KtdogNTcgts7V/c7EoaMNCg0KIyMg0KG92iA1OA0KDQq12iA1OCC2ztX9zsShow0KDQojIyDQob3aIDU5DQoNCrXaIDU5ILbO1f3OxKGjDQoNCiMjINChvdogNjANCg0KtdogNjAgts7V/c7EoaMNCg=="
+   }
+  },
+  {
+   "name": "focus-editor",
+   "do": "focusEditor",
+   "line": 0,
+   "expect": {
+    "focused": true
+   }
+  },
+  {
+   "name": "type-keys",
+   "do": "keys",
+   "keys": [
+    "A",
+    "B",
+    "C"
+   ]
+  },
+  {
+   "name": "typed",
+   "do": "editState",
+   "expect": {
+    "dirty": true,
+    "title": {
+     "includes": "●"
+    }
+   }
+  },
+  {
+   "name": "ctrl-s",
+   "do": "keys",
+   "keys": [
+    "Control+S"
+   ],
+   "settle": 800
+  },
+  {
+   "name": "ctrl-s-saved",
+   "do": "editState",
+   "expect": {
+    "dirty": false
+   }
+  },
+  {
+   "name": "ctrl-s-bytes",
+   "do": "readFile",
+   "path": "${tmp}\\edit\\gb.md",
+   "expect": {
+    "base64": "QUJDIyCx4LytsuLK1A0KDQq12tK7ts6jusa7ufuhow0KDQojIyC12rb+vdoNCg0KxNrI3aOo0tHQ3rjEo6kNCg0KIyMg0KG92iAxDQoNCrXaIDEgts7V/c7EoaMNCg0KIyMg0KG92iAyDQoNCrXaIDIgts7V/c7EoaMNCg0KIyMg0KG92iAzDQoNCrXaIDMgts7V/c7EoaMNCg0KIyMg0KG92iA0DQoNCrXaIDQgts7V/c7EoaMNCg0KIyMg0KG92iA1DQoNCrXaIDUgts7V/c7EoaMNCg0KIyMg0KG92iA2DQoNCrXaIDYgts7V/c7EoaMNCg0KIyMg0KG92iA3DQoNCrXaIDcgts7V/c7EoaMNCg0KIyMg0KG92iA4DQoNCrXaIDggts7V/c7EoaMNCg0KIyMg0KG92iA5DQoNCrXaIDkgts7V/c7EoaMNCg0KIyMg0KG92iAxMA0KDQq12iAxMCC2ztX9zsShow0KDQojIyDQob3aIDExDQoNCrXaIDExILbO1f3OxKGjDQoNCiMjINChvdogMTINCg0KtdogMTIgts7V/c7EoaMNCg0KIyMg0KG92iAxMw0KDQq12iAxMyC2ztX9zsShow0KDQojIyDQob3aIDE0DQoNCrXaIDE0ILbO1f3OxKGjDQoNCiMjINChvdogMTUNCg0KtdogMTUgts7V/c7EoaMNCg0KIyMg0KG92iAxNg0KDQq12iAxNiC2ztX9zsShow0KDQojIyDQob3aIDE3DQoNCrXaIDE3ILbO1f3OxKGjDQoNCiMjINChvdogMTgNCg0KtdogMTggts7V/c7EoaMNCg0KIyMg0KG92iAxOQ0KDQq12iAxOSC2ztX9zsShow0KDQojIyDQob3aIDIwDQoNCrXaIDIwILbO1f3OxKGjDQoNCiMjINChvdogMjENCg0KtdogMjEgts7V/c7EoaMNCg0KIyMg0KG92iAyMg0KDQq12iAyMiC2ztX9zsShow0KDQojIyDQob3aIDIzDQoNCrXaIDIzILbO1f3OxKGjDQoNCiMjINChvdogMjQNCg0KtdogMjQgts7V/c7EoaMNCg0KIyMg0KG92iAyNQ0KDQq12iAyNSC2ztX9zsShow0KDQojIyDQob3aIDI2DQoNCrXaIDI2ILbO1f3OxKGjDQoNCiMjINChvdogMjcNCg0KtdogMjcgts7V/c7EoaMNCg0KIyMg0KG92iAyOA0KDQq12iAyOCC2ztX9zsShow0KDQojIyDQob3aIDI5DQoNCrXaIDI5ILbO1f3OxKGjDQoNCiMjINChvdogMzANCg0KtdogMzAgts7V/c7EoaMNCg0KIyMg0KG92iAzMQ0KDQq12iAzMSC2ztX9zsShow0KDQojIyDQob3aIDMyDQoNCrXaIDMyILbO1f3OxKGjDQoNCiMjINChvdogMzMNCg0KtdogMzMgts7V/c7EoaMNCg0KIyMg0KG92iAzNA0KDQq12iAzNCC2ztX9zsShow0KDQojIyDQob3aIDM1DQoNCrXaIDM1ILbO1f3OxKGjDQoNCiMjINChvdogMzYNCg0KtdogMzYgts7V/c7EoaMNCg0KIyMg0KG92iAzNw0KDQq12iAzNyC2ztX9zsShow0KDQojIyDQob3aIDM4DQoNCrXaIDM4ILbO1f3OxKGjDQoNCiMjINChvdogMzkNCg0KtdogMzkgts7V/c7EoaMNCg0KIyMg0KG92iA0MA0KDQq12iA0MCC2ztX9zsShow0KDQojIyDQob3aIDQxDQoNCrXaIDQxILbO1f3OxKGjDQoNCiMjINChvdogNDINCg0KtdogNDIgts7V/c7EoaMNCg0KIyMg0KG92iA0Mw0KDQq12iA0MyC2ztX9zsShow0KDQojIyDQob3aIDQ0DQoNCrXaIDQ0ILbO1f3OxKGjDQoNCiMjINChvdogNDUNCg0KtdogNDUgts7V/c7EoaMNCg0KIyMg0KG92iA0Ng0KDQq12iA0NiC2ztX9zsShow0KDQojIyDQob3aIDQ3DQoNCrXaIDQ3ILbO1f3OxKGjDQoNCiMjINChvdogNDgNCg0KtdogNDggts7V/c7EoaMNCg0KIyMg0KG92iA0OQ0KDQq12iA0OSC2ztX9zsShow0KDQojIyDQob3aIDUwDQoNCrXaIDUwILbO1f3OxKGjDQoNCiMjINChvdogNTENCg0KtdogNTEgts7V/c7EoaMNCg0KIyMg0KG92iA1Mg0KDQq12iA1MiC2ztX9zsShow0KDQojIyDQob3aIDUzDQoNCrXaIDUzILbO1f3OxKGjDQoNCiMjINChvdogNTQNCg0KtdogNTQgts7V/c7EoaMNCg0KIyMg0KG92iA1NQ0KDQq12iA1NSC2ztX9zsShow0KDQojIyDQob3aIDU2DQoNCrXaIDU2ILbO1f3OxKGjDQoNCiMjINChvdogNTcNCg0KtdogNTcgts7V/c7EoaMNCg0KIyMg0KG92iA1OA0KDQq12iA1OCC2ztX9zsShow0KDQojIyDQob3aIDU5DQoNCrXaIDU5ILbO1f3OxKGjDQoNCiMjINChvdogNjANCg0KtdogNjAgts7V/c7EoaMNCg=="
+   }
+  },
+  {
+   "name": "ctrl-f-editor-search",
+   "do": "keys",
+   "keys": [
+    "Control+F"
+   ]
+  },
+  {
+   "name": "editor-search-open",
+   "do": "exists",
+   "selector": ".doc-root.active .cm-search",
+   "expect": {
+    "count": 1
+   },
+   "screenshot": true
+  },
+  {
+   "name": "escape-search",
+   "do": "keys",
+   "keys": [
+    "Escape"
+   ]
+  },
+  {
+   "name": "external-clean",
+   "do": "writeFile",
+   "path": "${tmp}\\edit\\gb.md",
+   "base64": "QUJDIyCx4LytsuLK1A0KDQrN4rK/uMS2r6O6xru5+6GjDQoNCiMjILXatv692g0KDQrE2sjdo6jS0dDeuMSjqQ0KDQojIyDQob3aIDENCg0KtdogMSC2ztX9zsShow0KDQojIyDQob3aIDINCg0KtdogMiC2ztX9zsShow0KDQojIyDQob3aIDMNCg0KtdogMyC2ztX9zsShow0KDQojIyDQob3aIDQNCg0KtdogNCC2ztX9zsShow0KDQojIyDQob3aIDUNCg0KtdogNSC2ztX9zsShow0KDQojIyDQob3aIDYNCg0KtdogNiC2ztX9zsShow0KDQojIyDQob3aIDcNCg0KtdogNyC2ztX9zsShow0KDQojIyDQob3aIDgNCg0KtdogOCC2ztX9zsShow0KDQojIyDQob3aIDkNCg0KtdogOSC2ztX9zsShow0KDQojIyDQob3aIDEwDQoNCrXaIDEwILbO1f3OxKGjDQoNCiMjINChvdogMTENCg0KtdogMTEgts7V/c7EoaMNCg0KIyMg0KG92iAxMg0KDQq12iAxMiC2ztX9zsShow0KDQojIyDQob3aIDEzDQoNCrXaIDEzILbO1f3OxKGjDQoNCiMjINChvdogMTQNCg0KtdogMTQgts7V/c7EoaMNCg0KIyMg0KG92iAxNQ0KDQq12iAxNSC2ztX9zsShow0KDQojIyDQob3aIDE2DQoNCrXaIDE2ILbO1f3OxKGjDQoNCiMjINChvdogMTcNCg0KtdogMTcgts7V/c7EoaMNCg0KIyMg0KG92iAxOA0KDQq12iAxOCC2ztX9zsShow0KDQojIyDQob3aIDE5DQoNCrXaIDE5ILbO1f3OxKGjDQoNCiMjINChvdogMjANCg0KtdogMjAgts7V/c7EoaMNCg0KIyMg0KG92iAyMQ0KDQq12iAyMSC2ztX9zsShow0KDQojIyDQob3aIDIyDQoNCrXaIDIyILbO1f3OxKGjDQoNCiMjINChvdogMjMNCg0KtdogMjMgts7V/c7EoaMNCg0KIyMg0KG92iAyNA0KDQq12iAyNCC2ztX9zsShow0KDQojIyDQob3aIDI1DQoNCrXaIDI1ILbO1f3OxKGjDQoNCiMjINChvdogMjYNCg0KtdogMjYgts7V/c7EoaMNCg0KIyMg0KG92iAyNw0KDQq12iAyNyC2ztX9zsShow0KDQojIyDQob3aIDI4DQoNCrXaIDI4ILbO1f3OxKGjDQoNCiMjINChvdogMjkNCg0KtdogMjkgts7V/c7EoaMNCg0KIyMg0KG92iAzMA0KDQq12iAzMCC2ztX9zsShow0KDQojIyDQob3aIDMxDQoNCrXaIDMxILbO1f3OxKGjDQoNCiMjINChvdogMzINCg0KtdogMzIgts7V/c7EoaMNCg0KIyMg0KG92iAzMw0KDQq12iAzMyC2ztX9zsShow0KDQojIyDQob3aIDM0DQoNCrXaIDM0ILbO1f3OxKGjDQoNCiMjINChvdogMzUNCg0KtdogMzUgts7V/c7EoaMNCg0KIyMg0KG92iAzNg0KDQq12iAzNiC2ztX9zsShow0KDQojIyDQob3aIDM3DQoNCrXaIDM3ILbO1f3OxKGjDQoNCiMjINChvdogMzgNCg0KtdogMzggts7V/c7EoaMNCg0KIyMg0KG92iAzOQ0KDQq12iAzOSC2ztX9zsShow0KDQojIyDQob3aIDQwDQoNCrXaIDQwILbO1f3OxKGjDQoNCiMjINChvdogNDENCg0KtdogNDEgts7V/c7EoaMNCg0KIyMg0KG92iA0Mg0KDQq12iA0MiC2ztX9zsShow0KDQojIyDQob3aIDQzDQoNCrXaIDQzILbO1f3OxKGjDQoNCiMjINChvdogNDQNCg0KtdogNDQgts7V/c7EoaMNCg0KIyMg0KG92iA0NQ0KDQq12iA0NSC2ztX9zsShow0KDQojIyDQob3aIDQ2DQoNCrXaIDQ2ILbO1f3OxKGjDQoNCiMjINChvdogNDcNCg0KtdogNDcgts7V/c7EoaMNCg0KIyMg0KG92iA0OA0KDQq12iA0OCC2ztX9zsShow0KDQojIyDQob3aIDQ5DQoNCrXaIDQ5ILbO1f3OxKGjDQoNCiMjINChvdogNTANCg0KtdogNTAgts7V/c7EoaMNCg0KIyMg0KG92iA1MQ0KDQq12iA1MSC2ztX9zsShow0KDQojIyDQob3aIDUyDQoNCrXaIDUyILbO1f3OxKGjDQoNCiMjINChvdogNTMNCg0KtdogNTMgts7V/c7EoaMNCg0KIyMg0KG92iA1NA0KDQq12iA1NCC2ztX9zsShow0KDQojIyDQob3aIDU1DQoNCrXaIDU1ILbO1f3OxKGjDQoNCiMjINChvdogNTYNCg0KtdogNTYgts7V/c7EoaMNCg0KIyMg0KG92iA1Nw0KDQq12iA1NyC2ztX9zsShow0KDQojIyDQob3aIDU4DQoNCrXaIDU4ILbO1f3OxKGjDQoNCiMjINChvdogNTkNCg0KtdogNTkgts7V/c7EoaMNCg0KIyMg0KG92iA2MA0KDQq12iA2MCC2ztX9zsShow0K"
+  },
+  {
+   "name": "external-clean-loaded",
+   "do": "waitEditorText",
+   "includes": "外部改动",
+   "expect": {
+    "found": true,
+    "dirty": false
+   }
+  },
+  {
+   "name": "edit-before-conflict",
+   "do": "edit",
+   "insert": "\n我的修改\n",
+   "expect": {
+    "dirty": true
+   }
+  },
+  {
+   "name": "external-dirty",
+   "do": "writeFile",
+   "path": "${tmp}\\edit\\gb.md",
+   "base64": "QUJDIyCx4LytsuLK1A0KDQrN4rK/uMS2r6O6xru5+6GjDQoNCiMjIM3isr+12rb+tM4NCg0KxNrI3aOo0tHQ3rjEo6kNCg0KIyMg0KG92iAxDQoNCrXaIDEgts7V/c7EoaMNCg0KIyMg0KG92iAyDQoNCrXaIDIgts7V/c7EoaMNCg0KIyMg0KG92iAzDQoNCrXaIDMgts7V/c7EoaMNCg0KIyMg0KG92iA0DQoNCrXaIDQgts7V/c7EoaMNCg0KIyMg0KG92iA1DQoNCrXaIDUgts7V/c7EoaMNCg0KIyMg0KG92iA2DQoNCrXaIDYgts7V/c7EoaMNCg0KIyMg0KG92iA3DQoNCrXaIDcgts7V/c7EoaMNCg0KIyMg0KG92iA4DQoNCrXaIDggts7V/c7EoaMNCg0KIyMg0KG92iA5DQoNCrXaIDkgts7V/c7EoaMNCg0KIyMg0KG92iAxMA0KDQq12iAxMCC2ztX9zsShow0KDQojIyDQob3aIDExDQoNCrXaIDExILbO1f3OxKGjDQoNCiMjINChvdogMTINCg0KtdogMTIgts7V/c7EoaMNCg0KIyMg0KG92iAxMw0KDQq12iAxMyC2ztX9zsShow0KDQojIyDQob3aIDE0DQoNCrXaIDE0ILbO1f3OxKGjDQoNCiMjINChvdogMTUNCg0KtdogMTUgts7V/c7EoaMNCg0KIyMg0KG92iAxNg0KDQq12iAxNiC2ztX9zsShow0KDQojIyDQob3aIDE3DQoNCrXaIDE3ILbO1f3OxKGjDQoNCiMjINChvdogMTgNCg0KtdogMTggts7V/c7EoaMNCg0KIyMg0KG92iAxOQ0KDQq12iAxOSC2ztX9zsShow0KDQojIyDQob3aIDIwDQoNCrXaIDIwILbO1f3OxKGjDQoNCiMjINChvdogMjENCg0KtdogMjEgts7V/c7EoaMNCg0KIyMg0KG92iAyMg0KDQq12iAyMiC2ztX9zsShow0KDQojIyDQob3aIDIzDQoNCrXaIDIzILbO1f3OxKGjDQoNCiMjINChvdogMjQNCg0KtdogMjQgts7V/c7EoaMNCg0KIyMg0KG92iAyNQ0KDQq12iAyNSC2ztX9zsShow0KDQojIyDQob3aIDI2DQoNCrXaIDI2ILbO1f3OxKGjDQoNCiMjINChvdogMjcNCg0KtdogMjcgts7V/c7EoaMNCg0KIyMg0KG92iAyOA0KDQq12iAyOCC2ztX9zsShow0KDQojIyDQob3aIDI5DQoNCrXaIDI5ILbO1f3OxKGjDQoNCiMjINChvdogMzANCg0KtdogMzAgts7V/c7EoaMNCg0KIyMg0KG92iAzMQ0KDQq12iAzMSC2ztX9zsShow0KDQojIyDQob3aIDMyDQoNCrXaIDMyILbO1f3OxKGjDQoNCiMjINChvdogMzMNCg0KtdogMzMgts7V/c7EoaMNCg0KIyMg0KG92iAzNA0KDQq12iAzNCC2ztX9zsShow0KDQojIyDQob3aIDM1DQoNCrXaIDM1ILbO1f3OxKGjDQoNCiMjINChvdogMzYNCg0KtdogMzYgts7V/c7EoaMNCg0KIyMg0KG92iAzNw0KDQq12iAzNyC2ztX9zsShow0KDQojIyDQob3aIDM4DQoNCrXaIDM4ILbO1f3OxKGjDQoNCiMjINChvdogMzkNCg0KtdogMzkgts7V/c7EoaMNCg0KIyMg0KG92iA0MA0KDQq12iA0MCC2ztX9zsShow0KDQojIyDQob3aIDQxDQoNCrXaIDQxILbO1f3OxKGjDQoNCiMjINChvdogNDINCg0KtdogNDIgts7V/c7EoaMNCg0KIyMg0KG92iA0Mw0KDQq12iA0MyC2ztX9zsShow0KDQojIyDQob3aIDQ0DQoNCrXaIDQ0ILbO1f3OxKGjDQoNCiMjINChvdogNDUNCg0KtdogNDUgts7V/c7EoaMNCg0KIyMg0KG92iA0Ng0KDQq12iA0NiC2ztX9zsShow0KDQojIyDQob3aIDQ3DQoNCrXaIDQ3ILbO1f3OxKGjDQoNCiMjINChvdogNDgNCg0KtdogNDggts7V/c7EoaMNCg0KIyMg0KG92iA0OQ0KDQq12iA0OSC2ztX9zsShow0KDQojIyDQob3aIDUwDQoNCrXaIDUwILbO1f3OxKGjDQoNCiMjINChvdogNTENCg0KtdogNTEgts7V/c7EoaMNCg0KIyMg0KG92iA1Mg0KDQq12iA1MiC2ztX9zsShow0KDQojIyDQob3aIDUzDQoNCrXaIDUzILbO1f3OxKGjDQoNCiMjINChvdogNTQNCg0KtdogNTQgts7V/c7EoaMNCg0KIyMg0KG92iA1NQ0KDQq12iA1NSC2ztX9zsShow0KDQojIyDQob3aIDU2DQoNCrXaIDU2ILbO1f3OxKGjDQoNCiMjINChvdogNTcNCg0KtdogNTcgts7V/c7EoaMNCg0KIyMg0KG92iA1OA0KDQq12iA1OCC2ztX9zsShow0KDQojIyDQob3aIDU5DQoNCrXaIDU5ILbO1f3OxKGjDQoNCiMjINChvdogNjANCg0KtdogNjAgts7V/c7EoaMNCg=="
+  },
+  {
+   "name": "external-dirty-banner",
+   "do": "waitBanner",
+   "includes": "已在外部被修改",
+   "expect": {
+    "found": true
+   },
+   "screenshot": true
+  },
+  {
+   "name": "edits-kept",
+   "do": "editState",
+   "expect": {
+    "dirty": true,
+    "text": {
+     "includes": "我的修改"
+    }
+   }
+  },
+  {
+   "name": "conflict-cancel-answer",
+   "do": "answer",
+   "responses": [
+    1
+   ]
+  },
+  {
+   "name": "conflict-cancel",
+   "do": "save",
+   "expect": {
+    "saved": false,
+    "dirty": true
+   }
+  },
+  {
+   "name": "conflict-asked",
+   "do": "asked",
+   "expect": {
+    "asked.0": {
+     "includes": "在你编辑期间被其他程序修改过"
+    }
+   }
+  },
+  {
+   "name": "conflict-untouched",
+   "do": "readFile",
+   "path": "${tmp}\\edit\\gb.md",
+   "expect": {
+    "base64": "QUJDIyCx4LytsuLK1A0KDQrN4rK/uMS2r6O6xru5+6GjDQoNCiMjIM3isr+12rb+tM4NCg0KxNrI3aOo0tHQ3rjEo6kNCg0KIyMg0KG92iAxDQoNCrXaIDEgts7V/c7EoaMNCg0KIyMg0KG92iAyDQoNCrXaIDIgts7V/c7EoaMNCg0KIyMg0KG92iAzDQoNCrXaIDMgts7V/c7EoaMNCg0KIyMg0KG92iA0DQoNCrXaIDQgts7V/c7EoaMNCg0KIyMg0KG92iA1DQoNCrXaIDUgts7V/c7EoaMNCg0KIyMg0KG92iA2DQoNCrXaIDYgts7V/c7EoaMNCg0KIyMg0KG92iA3DQoNCrXaIDcgts7V/c7EoaMNCg0KIyMg0KG92iA4DQoNCrXaIDggts7V/c7EoaMNCg0KIyMg0KG92iA5DQoNCrXaIDkgts7V/c7EoaMNCg0KIyMg0KG92iAxMA0KDQq12iAxMCC2ztX9zsShow0KDQojIyDQob3aIDExDQoNCrXaIDExILbO1f3OxKGjDQoNCiMjINChvdogMTINCg0KtdogMTIgts7V/c7EoaMNCg0KIyMg0KG92iAxMw0KDQq12iAxMyC2ztX9zsShow0KDQojIyDQob3aIDE0DQoNCrXaIDE0ILbO1f3OxKGjDQoNCiMjINChvdogMTUNCg0KtdogMTUgts7V/c7EoaMNCg0KIyMg0KG92iAxNg0KDQq12iAxNiC2ztX9zsShow0KDQojIyDQob3aIDE3DQoNCrXaIDE3ILbO1f3OxKGjDQoNCiMjINChvdogMTgNCg0KtdogMTggts7V/c7EoaMNCg0KIyMg0KG92iAxOQ0KDQq12iAxOSC2ztX9zsShow0KDQojIyDQob3aIDIwDQoNCrXaIDIwILbO1f3OxKGjDQoNCiMjINChvdogMjENCg0KtdogMjEgts7V/c7EoaMNCg0KIyMg0KG92iAyMg0KDQq12iAyMiC2ztX9zsShow0KDQojIyDQob3aIDIzDQoNCrXaIDIzILbO1f3OxKGjDQoNCiMjINChvdogMjQNCg0KtdogMjQgts7V/c7EoaMNCg0KIyMg0KG92iAyNQ0KDQq12iAyNSC2ztX9zsShow0KDQojIyDQob3aIDI2DQoNCrXaIDI2ILbO1f3OxKGjDQoNCiMjINChvdogMjcNCg0KtdogMjcgts7V/c7EoaMNCg0KIyMg0KG92iAyOA0KDQq12iAyOCC2ztX9zsShow0KDQojIyDQob3aIDI5DQoNCrXaIDI5ILbO1f3OxKGjDQoNCiMjINChvdogMzANCg0KtdogMzAgts7V/c7EoaMNCg0KIyMg0KG92iAzMQ0KDQq12iAzMSC2ztX9zsShow0KDQojIyDQob3aIDMyDQoNCrXaIDMyILbO1f3OxKGjDQoNCiMjINChvdogMzMNCg0KtdogMzMgts7V/c7EoaMNCg0KIyMg0KG92iAzNA0KDQq12iAzNCC2ztX9zsShow0KDQojIyDQob3aIDM1DQoNCrXaIDM1ILbO1f3OxKGjDQoNCiMjINChvdogMzYNCg0KtdogMzYgts7V/c7EoaMNCg0KIyMg0KG92iAzNw0KDQq12iAzNyC2ztX9zsShow0KDQojIyDQob3aIDM4DQoNCrXaIDM4ILbO1f3OxKGjDQoNCiMjINChvdogMzkNCg0KtdogMzkgts7V/c7EoaMNCg0KIyMg0KG92iA0MA0KDQq12iA0MCC2ztX9zsShow0KDQojIyDQob3aIDQxDQoNCrXaIDQxILbO1f3OxKGjDQoNCiMjINChvdogNDINCg0KtdogNDIgts7V/c7EoaMNCg0KIyMg0KG92iA0Mw0KDQq12iA0MyC2ztX9zsShow0KDQojIyDQob3aIDQ0DQoNCrXaIDQ0ILbO1f3OxKGjDQoNCiMjINChvdogNDUNCg0KtdogNDUgts7V/c7EoaMNCg0KIyMg0KG92iA0Ng0KDQq12iA0NiC2ztX9zsShow0KDQojIyDQob3aIDQ3DQoNCrXaIDQ3ILbO1f3OxKGjDQoNCiMjINChvdogNDgNCg0KtdogNDggts7V/c7EoaMNCg0KIyMg0KG92iA0OQ0KDQq12iA0OSC2ztX9zsShow0KDQojIyDQob3aIDUwDQoNCrXaIDUwILbO1f3OxKGjDQoNCiMjINChvdogNTENCg0KtdogNTEgts7V/c7EoaMNCg0KIyMg0KG92iA1Mg0KDQq12iA1MiC2ztX9zsShow0KDQojIyDQob3aIDUzDQoNCrXaIDUzILbO1f3OxKGjDQoNCiMjINChvdogNTQNCg0KtdogNTQgts7V/c7EoaMNCg0KIyMg0KG92iA1NQ0KDQq12iA1NSC2ztX9zsShow0KDQojIyDQob3aIDU2DQoNCrXaIDU2ILbO1f3OxKGjDQoNCiMjINChvdogNTcNCg0KtdogNTcgts7V/c7EoaMNCg0KIyMg0KG92iA1OA0KDQq12iA1OCC2ztX9zsShow0KDQojIyDQob3aIDU5DQoNCrXaIDU5ILbO1f3OxKGjDQoNCiMjINChvdogNjANCg0KtdogNjAgts7V/c7EoaMNCg=="
+   }
+  },
+  {
+   "name": "conflict-overwrite-answer",
+   "do": "answer",
+   "responses": [
+    0
+   ]
+  },
+  {
+   "name": "conflict-overwrite",
+   "do": "save",
+   "expect": {
+    "saved": true,
+    "dirty": false
+   }
+  },
+  {
+   "name": "overwritten-bytes",
+   "do": "readFile",
+   "path": "${tmp}\\edit\\gb.md",
+   "expect": {
+    "base64": "QUJDIyCx4LytsuLK1A0KDQrN4rK/uMS2r6O6xru5+6GjDQoNCiMjILXatv692g0KDQrE2sjdo6jS0dDeuMSjqQ0KDQojIyDQob3aIDENCg0KtdogMSC2ztX9zsShow0KDQojIyDQob3aIDINCg0KtdogMiC2ztX9zsShow0KDQojIyDQob3aIDMNCg0KtdogMyC2ztX9zsShow0KDQojIyDQob3aIDQNCg0KtdogNCC2ztX9zsShow0KDQojIyDQob3aIDUNCg0KtdogNSC2ztX9zsShow0KDQojIyDQob3aIDYNCg0KtdogNiC2ztX9zsShow0KDQojIyDQob3aIDcNCg0KtdogNyC2ztX9zsShow0KDQojIyDQob3aIDgNCg0KtdogOCC2ztX9zsShow0KDQojIyDQob3aIDkNCg0KtdogOSC2ztX9zsShow0KDQojIyDQob3aIDEwDQoNCrXaIDEwILbO1f3OxKGjDQoNCiMjINChvdogMTENCg0KtdogMTEgts7V/c7EoaMNCg0KIyMg0KG92iAxMg0KDQq12iAxMiC2ztX9zsShow0KDQojIyDQob3aIDEzDQoNCrXaIDEzILbO1f3OxKGjDQoNCiMjINChvdogMTQNCg0KtdogMTQgts7V/c7EoaMNCg0KIyMg0KG92iAxNQ0KDQq12iAxNSC2ztX9zsShow0KDQojIyDQob3aIDE2DQoNCrXaIDE2ILbO1f3OxKGjDQoNCiMjINChvdogMTcNCg0KtdogMTcgts7V/c7EoaMNCg0KIyMg0KG92iAxOA0KDQq12iAxOCC2ztX9zsShow0KDQojIyDQob3aIDE5DQoNCrXaIDE5ILbO1f3OxKGjDQoNCiMjINChvdogMjANCg0KtdogMjAgts7V/c7EoaMNCg0KIyMg0KG92iAyMQ0KDQq12iAyMSC2ztX9zsShow0KDQojIyDQob3aIDIyDQoNCrXaIDIyILbO1f3OxKGjDQoNCiMjINChvdogMjMNCg0KtdogMjMgts7V/c7EoaMNCg0KIyMg0KG92iAyNA0KDQq12iAyNCC2ztX9zsShow0KDQojIyDQob3aIDI1DQoNCrXaIDI1ILbO1f3OxKGjDQoNCiMjINChvdogMjYNCg0KtdogMjYgts7V/c7EoaMNCg0KIyMg0KG92iAyNw0KDQq12iAyNyC2ztX9zsShow0KDQojIyDQob3aIDI4DQoNCrXaIDI4ILbO1f3OxKGjDQoNCiMjINChvdogMjkNCg0KtdogMjkgts7V/c7EoaMNCg0KIyMg0KG92iAzMA0KDQq12iAzMCC2ztX9zsShow0KDQojIyDQob3aIDMxDQoNCrXaIDMxILbO1f3OxKGjDQoNCiMjINChvdogMzINCg0KtdogMzIgts7V/c7EoaMNCg0KIyMg0KG92iAzMw0KDQq12iAzMyC2ztX9zsShow0KDQojIyDQob3aIDM0DQoNCrXaIDM0ILbO1f3OxKGjDQoNCiMjINChvdogMzUNCg0KtdogMzUgts7V/c7EoaMNCg0KIyMg0KG92iAzNg0KDQq12iAzNiC2ztX9zsShow0KDQojIyDQob3aIDM3DQoNCrXaIDM3ILbO1f3OxKGjDQoNCiMjINChvdogMzgNCg0KtdogMzggts7V/c7EoaMNCg0KIyMg0KG92iAzOQ0KDQq12iAzOSC2ztX9zsShow0KDQojIyDQob3aIDQwDQoNCrXaIDQwILbO1f3OxKGjDQoNCiMjINChvdogNDENCg0KtdogNDEgts7V/c7EoaMNCg0KIyMg0KG92iA0Mg0KDQq12iA0MiC2ztX9zsShow0KDQojIyDQob3aIDQzDQoNCrXaIDQzILbO1f3OxKGjDQoNCiMjINChvdogNDQNCg0KtdogNDQgts7V/c7EoaMNCg0KIyMg0KG92iA0NQ0KDQq12iA0NSC2ztX9zsShow0KDQojIyDQob3aIDQ2DQoNCrXaIDQ2ILbO1f3OxKGjDQoNCiMjINChvdogNDcNCg0KtdogNDcgts7V/c7EoaMNCg0KIyMg0KG92iA0OA0KDQq12iA0OCC2ztX9zsShow0KDQojIyDQob3aIDQ5DQoNCrXaIDQ5ILbO1f3OxKGjDQoNCiMjINChvdogNTANCg0KtdogNTAgts7V/c7EoaMNCg0KIyMg0KG92iA1MQ0KDQq12iA1MSC2ztX9zsShow0KDQojIyDQob3aIDUyDQoNCrXaIDUyILbO1f3OxKGjDQoNCiMjINChvdogNTMNCg0KtdogNTMgts7V/c7EoaMNCg0KIyMg0KG92iA1NA0KDQq12iA1NCC2ztX9zsShow0KDQojIyDQob3aIDU1DQoNCrXaIDU1ILbO1f3OxKGjDQoNCiMjINChvdogNTYNCg0KtdogNTYgts7V/c7EoaMNCg0KIyMg0KG92iA1Nw0KDQq12iA1NyC2ztX9zsShow0KDQojIyDQob3aIDU4DQoNCrXaIDU4ILbO1f3OxKGjDQoNCiMjINChvdogNTkNCg0KtdogNTkgts7V/c7EoaMNCg0KIyMg0KG92iA2MA0KDQq12iA2MCC2ztX9zsShow0KDQrO0rXE0N64xA0K"
+   }
+  },
+  {
+   "name": "leave-edit",
+   "do": "edit",
+   "insert": "Z",
+   "expect": {
+    "dirty": true
+   }
+  },
+  {
+   "name": "leave-cancel-answer",
+   "do": "answer",
+   "responses": [
+    2
+   ]
+  },
+  {
+   "name": "leave-cancel",
+   "do": "navigateAway",
+   "path": "${tmp}\\edit\\other.md",
+   "expect": {
+    "left": false,
+    "dirty": true,
+    "asked.0": {
+     "includes": "未保存的修改"
+    }
+   }
+  },
+  {
+   "name": "leave-discard-answer",
+   "do": "answer",
+   "responses": [
+    1
+   ]
+  },
+  {
+   "name": "leave-discard",
+   "do": "navigateAway",
+   "path": "${tmp}\\edit\\other.md",
+   "expect": {
+    "left": true
+   }
+  },
+  {
+   "name": "discarded-bytes",
+   "do": "readFile",
+   "path": "${tmp}\\edit\\gb.md",
+   "expect": {
+    "base64": "QUJDIyCx4LytsuLK1A0KDQrN4rK/uMS2r6O6xru5+6GjDQoNCiMjILXatv692g0KDQrE2sjdo6jS0dDeuMSjqQ0KDQojIyDQob3aIDENCg0KtdogMSC2ztX9zsShow0KDQojIyDQob3aIDINCg0KtdogMiC2ztX9zsShow0KDQojIyDQob3aIDMNCg0KtdogMyC2ztX9zsShow0KDQojIyDQob3aIDQNCg0KtdogNCC2ztX9zsShow0KDQojIyDQob3aIDUNCg0KtdogNSC2ztX9zsShow0KDQojIyDQob3aIDYNCg0KtdogNiC2ztX9zsShow0KDQojIyDQob3aIDcNCg0KtdogNyC2ztX9zsShow0KDQojIyDQob3aIDgNCg0KtdogOCC2ztX9zsShow0KDQojIyDQob3aIDkNCg0KtdogOSC2ztX9zsShow0KDQojIyDQob3aIDEwDQoNCrXaIDEwILbO1f3OxKGjDQoNCiMjINChvdogMTENCg0KtdogMTEgts7V/c7EoaMNCg0KIyMg0KG92iAxMg0KDQq12iAxMiC2ztX9zsShow0KDQojIyDQob3aIDEzDQoNCrXaIDEzILbO1f3OxKGjDQoNCiMjINChvdogMTQNCg0KtdogMTQgts7V/c7EoaMNCg0KIyMg0KG92iAxNQ0KDQq12iAxNSC2ztX9zsShow0KDQojIyDQob3aIDE2DQoNCrXaIDE2ILbO1f3OxKGjDQoNCiMjINChvdogMTcNCg0KtdogMTcgts7V/c7EoaMNCg0KIyMg0KG92iAxOA0KDQq12iAxOCC2ztX9zsShow0KDQojIyDQob3aIDE5DQoNCrXaIDE5ILbO1f3OxKGjDQoNCiMjINChvdogMjANCg0KtdogMjAgts7V/c7EoaMNCg0KIyMg0KG92iAyMQ0KDQq12iAyMSC2ztX9zsShow0KDQojIyDQob3aIDIyDQoNCrXaIDIyILbO1f3OxKGjDQoNCiMjINChvdogMjMNCg0KtdogMjMgts7V/c7EoaMNCg0KIyMg0KG92iAyNA0KDQq12iAyNCC2ztX9zsShow0KDQojIyDQob3aIDI1DQoNCrXaIDI1ILbO1f3OxKGjDQoNCiMjINChvdogMjYNCg0KtdogMjYgts7V/c7EoaMNCg0KIyMg0KG92iAyNw0KDQq12iAyNyC2ztX9zsShow0KDQojIyDQob3aIDI4DQoNCrXaIDI4ILbO1f3OxKGjDQoNCiMjINChvdogMjkNCg0KtdogMjkgts7V/c7EoaMNCg0KIyMg0KG92iAzMA0KDQq12iAzMCC2ztX9zsShow0KDQojIyDQob3aIDMxDQoNCrXaIDMxILbO1f3OxKGjDQoNCiMjINChvdogMzINCg0KtdogMzIgts7V/c7EoaMNCg0KIyMg0KG92iAzMw0KDQq12iAzMyC2ztX9zsShow0KDQojIyDQob3aIDM0DQoNCrXaIDM0ILbO1f3OxKGjDQoNCiMjINChvdogMzUNCg0KtdogMzUgts7V/c7EoaMNCg0KIyMg0KG92iAzNg0KDQq12iAzNiC2ztX9zsShow0KDQojIyDQob3aIDM3DQoNCrXaIDM3ILbO1f3OxKGjDQoNCiMjINChvdogMzgNCg0KtdogMzggts7V/c7EoaMNCg0KIyMg0KG92iAzOQ0KDQq12iAzOSC2ztX9zsShow0KDQojIyDQob3aIDQwDQoNCrXaIDQwILbO1f3OxKGjDQoNCiMjINChvdogNDENCg0KtdogNDEgts7V/c7EoaMNCg0KIyMg0KG92iA0Mg0KDQq12iA0MiC2ztX9zsShow0KDQojIyDQob3aIDQzDQoNCrXaIDQzILbO1f3OxKGjDQoNCiMjINChvdogNDQNCg0KtdogNDQgts7V/c7EoaMNCg0KIyMg0KG92iA0NQ0KDQq12iA0NSC2ztX9zsShow0KDQojIyDQob3aIDQ2DQoNCrXaIDQ2ILbO1f3OxKGjDQoNCiMjINChvdogNDcNCg0KtdogNDcgts7V/c7EoaMNCg0KIyMg0KG92iA0OA0KDQq12iA0OCC2ztX9zsShow0KDQojIyDQob3aIDQ5DQoNCrXaIDQ5ILbO1f3OxKGjDQoNCiMjINChvdogNTANCg0KtdogNTAgts7V/c7EoaMNCg0KIyMg0KG92iA1MQ0KDQq12iA1MSC2ztX9zsShow0KDQojIyDQob3aIDUyDQoNCrXaIDUyILbO1f3OxKGjDQoNCiMjINChvdogNTMNCg0KtdogNTMgts7V/c7EoaMNCg0KIyMg0KG92iA1NA0KDQq12iA1NCC2ztX9zsShow0KDQojIyDQob3aIDU1DQoNCrXaIDU1ILbO1f3OxKGjDQoNCiMjINChvdogNTYNCg0KtdogNTYgts7V/c7EoaMNCg0KIyMg0KG92iA1Nw0KDQq12iA1NyC2ztX9zsShow0KDQojIyDQob3aIDU4DQoNCrXaIDU4ILbO1f3OxKGjDQoNCiMjINChvdogNTkNCg0KtdogNTkgts7V/c7EoaMNCg0KIyMg0KG92iA2MA0KDQq12iA2MCC2ztX9zsShow0KDQrO0rXE0N64xA0K"
+   }
+  },
+  {
+   "name": "open-bom",
+   "do": "open",
+   "path": "${tmp}\\edit\\bom.md",
+   "expect": {
+    "view.meta.encoding": "UTF-8 BOM",
+    "view.meta.eol": "LF"
+   }
+  },
+  {
+   "name": "bom-edit-mode",
+   "do": "mode",
+   "mode": "edit",
+   "expect": {
+    "mode": "edit",
+    "editorVisible": true,
+    "previewVisible": false
+   }
+  },
+  {
+   "name": "bom-edit",
+   "do": "edit",
+   "insert": "追加\n",
+   "expect": {
+    "dirty": true
+   }
+  },
+  {
+   "name": "close-cancel-answer",
+   "do": "answer",
+   "responses": [
+    2
+   ]
+  },
+  {
+   "name": "close-tab-cancel",
+   "do": "closeTab",
+   "expect": {
+    "closed": false
+   }
+  },
+  {
+   "name": "close-save-answer",
+   "do": "answer",
+   "responses": [
+    0
+   ]
+  },
+  {
+   "name": "close-tab-save",
+   "do": "closeTab",
+   "expect": {
+    "closed": true
+   }
+  },
+  {
+   "name": "bom-bytes",
+   "do": "readFile",
+   "path": "${tmp}\\edit\\bom.md",
+   "expect": {
+    "base64": "77u/IyBCT00g5paH5Lu2CgrkuIDooYwK6L+95YqgCg=="
+   }
+  },
+  {
+   "name": "view-mode-still-reads",
+   "do": "open",
+   "path": "${fixtures}\\gfm\\02-gfm.md",
+   "expect": {
+    "view.error": null
+   }
+  },
+  {
+   "name": "view-mode-default",
+   "do": "editState",
+   "expect": {
+    "mode": "view",
+    "editorVisible": false,
+    "previewVisible": true
+   }
+  },
+  {
+   "name": "theme-dark",
+   "do": "setTheme",
+   "theme": "dark",
+   "expect": {
+    "dark": true
+   }
+  },
+  {
+   "name": "wide-window",
+   "do": "windowSize",
+   "width": 2400,
+   "height": 1300,
+   "expect": {
+    "cssWidth": {
+     "min": 2300
+    }
+   }
+  },
+  {
+   "name": "wide-report",
+   "do": "open",
+   "path": "${fixtures}\\wechat\\聊天记录月报\\2026-09\\月报_2026-09.md",
+   "expect": {
+    "view.meta.refs": 13
+   }
+  },
+  {
+   "name": "wide-split",
+   "do": "mode",
+   "mode": "split",
+   "expect": {
+    "mode": "split",
+    "editorWidth": {
+     "min": 900
+    },
+    "previewWidth": {
+     "min": 900
+    }
+   },
+   "screenshot": true
+  },
+  {
+   "name": "wide-edit",
+   "do": "mode",
+   "mode": "edit",
+   "expect": {
+    "mode": "edit",
+    "previewVisible": false
+   },
+   "screenshot": true
+  },
+  {
+   "name": "wide-view",
+   "do": "mode",
+   "mode": "view",
+   "expect": {
+    "mode": "view",
+    "editorVisible": false,
+    "previewVisible": true,
+    "dirty": false
+   }
+  },
+  {
+   "name": "theme-light-wide",
+   "do": "setTheme",
+   "theme": "light"
+  },
+  {
+   "name": "wide-split-light",
+   "do": "mode",
+   "mode": "split",
+   "expect": {
+    "mode": "split"
+   },
+   "screenshot": true
+  },
+  {
+   "name": "wide-view-again",
+   "do": "mode",
+   "mode": "view"
+  },
+  {
+   "name": "sync-open",
+   "do": "open",
+   "path": "${tmp}\\edit\\gb.md"
+  },
+  {
+   "name": "sync-split",
+   "do": "mode",
+   "mode": "split"
+  },
+  {
+   "name": "sync-editor-drives-preview",
+   "do": "syncCheck",
+   "line": 120,
+   "expect": {
+    "editorTop": {
+     "min": 119,
+     "max": 121
+    },
+    "previewTop": {
+     "min": 117,
+     "max": 123
+    }
+   },
+   "screenshot": true
+  },
+  {
+   "name": "close-window-setup",
+   "do": "open",
+   "path": "${tmp}\\edit\\other.md"
+  },
+  {
+   "name": "close-window-edit-mode",
+   "do": "mode",
+   "mode": "split"
+  },
+  {
+   "name": "close-window-edit",
+   "do": "edit",
+   "insert": "未保存\n",
+   "expect": {
+    "dirty": true
+   }
+  },
+  {
+   "name": "close-window-answer",
+   "do": "answer",
+   "responses": [
+    2
+   ]
+  },
+  {
+   "name": "close-window-cancel",
+   "do": "closeWindow",
+   "expect": {
+    "stillOpen": true
+   }
+  },
+  {
+   "name": "close-window-asked",
+   "do": "asked",
+   "expect": {
+    "asked.0": {
+     "includes": "未保存的修改"
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <title>MD Viewer</title>
+    <link rel="icon" href="/icon.png" />
+    <link rel="stylesheet" href="/app.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body class="web">
+    <div id="app">
+      <div id="topbar">
+        <div id="nav-buttons">
+          <button class="icon-btn" id="btn-back" title="后退 (Alt+←)">←</button>
+          <button class="icon-btn" id="btn-forward" title="前进 (Alt+→)">→</button>
+          <button class="icon-btn" id="btn-sidebar" title="文件夹目录 (Ctrl+B)">☰</button>
+        </div>
+        <div id="tabstrip"></div>
+        <div id="web-title"></div>
+        <div id="web-actions">
+          <button class="chip" id="btn-index" title="索引状态" style="display: none"></button>
+          <button class="chip" id="btn-jobs" title="后台搜索" style="display: none"></button>
+          <button class="icon-btn" id="btn-search" title="搜索 (Ctrl+K)">⌕</button>
+          <button class="icon-btn" id="btn-open" title="打开本机文件 (Ctrl+O)">＋</button>
+          <button class="icon-btn" id="btn-more" title="更多">⋯</button>
+        </div>
+      </div>
+      <div id="toolbar">
+        <div id="breadcrumb"></div>
+        <div id="tool-buttons">
+          <button class="icon-btn" id="btn-prev-file" title="同一文件夹里的上一个文件" disabled>‹</button>
+          <button class="icon-btn" id="btn-next-file" title="同一文件夹里的下一个文件" disabled>›</button>
+          <button class="chip save" id="btn-save" title="导出副本到这台设备 (Ctrl+S)" style="display: none">导出</button>
+          <div class="seg" id="mode-seg" style="display: none">
+            <button data-mode="view" title="阅读 (Ctrl+E 在阅读和编辑之间切换)">阅读</button>
+            <button data-mode="edit" title="只显示源文本">编辑</button>
+            <button data-mode="split" title="源文本和预览并排 (Ctrl+Shift+E)">并排</button>
+          </div>
+          <button class="chip" id="btn-chatview" title="切换聊天视图 / 原文 (Ctrl+Shift+M)">聊天视图</button>
+          <button class="chip" id="btn-width" title="宽版阅读">宽版</button>
+          <button class="icon-btn" id="btn-find" title="页内查找 (Ctrl+F)">🔍</button>
+          <button class="icon-btn" id="btn-outline" title="大纲 (Ctrl+Shift+B)">≡</button>
+        </div>
+      </div>
+      <div id="workspace">
+        <aside id="sidebar" class="pane"></aside>
+        <div class="resizer" data-for="sidebar"></div>
+        <main id="center">
+          <div id="findbar-host"></div>
+          <div id="docs">
+            <div id="welcome"></div>
+          </div>
+        </main>
+        <div class="resizer" data-for="peek"></div>
+        <aside id="peek" class="pane"></aside>
+        <div class="resizer" data-for="outline"></div>
+        <aside id="outline" class="pane"></aside>
+        <aside id="search-panel" class="pane"></aside>
+      </div>
+      <footer id="statusbar">
+        <span id="status-left"></span>
+        <span id="status-right"></span>
+      </footer>
+    </div>
+    <div id="drawer-scrim"></div>
+    <div id="drop-overlay">松开以打开（只在浏览器里读取，不上传）</div>
+  </body>
+</html>

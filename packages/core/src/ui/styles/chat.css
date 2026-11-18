@@ -1,0 +1,178 @@
+/* Archive chat documents. Plain view = the original Markdown rendering;
+   .chat-view adds a conversation layout on top of the same DOM. */
+:root {
+  --bubble: #f1f3f5;
+  --bubble-self: #d8ecff;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bubble: #2b2e33;
+    --bubble-self: #1f3a5c;
+  }
+}
+
+.markdown-body p.mdv-msg-anchor {
+  margin: 0;
+}
+
+.chat-view .markdown-body,
+.peek-scroll.chat-view .markdown-body {
+  line-height: 1.6;
+}
+.chat-view .mdv-chrome {
+  display: revert;
+}
+.chat-view .mdv-msg-h,
+.chat-view .mdv-msg-meta,
+.chat-view p.mdv-msg-anchor {
+  display: none;
+}
+.chat-view section.mdv-msg {
+  position: relative;
+  padding: 4px 46px 4px 46px;
+  margin: 0 0 6px;
+  border-radius: 8px;
+}
+.chat-view .mdv-avatar {
+  position: absolute;
+  left: 2px;
+  top: 6px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: hsl(var(--hue, 210) 45% 52%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  user-select: none;
+}
+.chat-view .mdv-msg-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--fg-muted);
+  margin-bottom: 2px;
+}
+.chat-view .mdv-msg-sender {
+  font-weight: 600;
+  color: var(--fg);
+  opacity: 0.85;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 60%;
+}
+.chat-view .mdv-msg-type {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 6px;
+  font-size: 11px;
+}
+.chat-view .mdv-msg-body {
+  display: inline-block;
+  max-width: min(100%, 720px);
+  margin: 0;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px 12px 12px 12px;
+  background: var(--bubble);
+  color: var(--fg);
+  text-align: left;
+}
+.chat-view .mdv-msg-body p {
+  white-space: pre-line;
+  margin: 0;
+}
+.chat-view .mdv-msg-body p + p {
+  margin-top: 0.4em;
+}
+.chat-view .mdv-msg-attach {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+  font-size: 12px;
+}
+.chat-view .mdv-msg-attach ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.chat-view .mdv-msg-attach li:has(> a[data-mdv-consumed]:only-child) {
+  display: none;
+}
+.chat-view .mdv-msg-attach a[data-mdv-media] {
+  color: var(--fg-muted);
+}
+.chat-view section[data-type='图片']:has(.mdv-media:not(.missing)) > .mdv-msg-body,
+.chat-view section[data-type='视频']:has(.mdv-media:not(.missing)) > .mdv-msg-body {
+  display: none;
+}
+.chat-view .mdv-media {
+  width: fit-content;
+  max-width: 100%;
+}
+
+/* my own messages on the right */
+.chat-view section.mdv-self {
+  text-align: right;
+}
+.chat-view section.mdv-self .mdv-avatar {
+  left: auto;
+  right: 2px;
+}
+.chat-view section.mdv-self .mdv-msg-head {
+  flex-direction: row-reverse;
+}
+.chat-view section.mdv-self .mdv-msg-body {
+  border-radius: 12px 4px 12px 12px;
+  background: var(--bubble-self);
+}
+.chat-view section.mdv-self .mdv-media {
+  margin-left: auto;
+}
+
+/* system notices centred, no avatar */
+.chat-view section.mdv-msg-system {
+  text-align: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+.chat-view section.mdv-msg-system .mdv-avatar,
+.chat-view section.mdv-msg-system .mdv-msg-head {
+  display: none;
+}
+.chat-view section.mdv-msg-system .mdv-msg-body {
+  background: transparent;
+  color: var(--fg-muted);
+  font-size: 12.5px;
+  padding: 2px 8px;
+}
+
+.chat-view .mdv-day {
+  display: block;
+  text-align: center;
+  margin: 18px 0 10px;
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+.chat-view .mdv-day::before,
+.chat-view .mdv-day::after {
+  content: '';
+  display: inline-block;
+  width: 60px;
+  height: 1px;
+  background: var(--border);
+  vertical-align: middle;
+  margin: 0 10px;
+}
+
+.chat-view section.mdv-msg.mdv-target {
+  box-shadow: none;
+  background: var(--target);
+}
+.chat-view section.mdv-msg.mdv-target .mdv-msg-body {
+  outline: 2px solid var(--target-bar);
+}

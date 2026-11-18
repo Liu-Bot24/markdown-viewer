@@ -1,0 +1,52 @@
+{
+  "outDir": "test/output/outline",
+  "steps": [
+    { "name": "open", "do": "open", "path": "${fixtures}\\outline\\fold.md", "expect": { "view.error": null, "view.meta.headings": 73 } },
+    { "name": "starts-unfolded", "do": "outline", "expect": { "items": 73, "rows": 73, "buttonsShown": true, "collapseDisabled": false, "expandDisabled": true, "twisties": { "min": 10 } } },
+    { "name": "collapse-all-keeps-title-open", "do": "outline", "action": "collapseAll", "expect": { "rows": 13, "folded.length": 24, "first.0": "大纲折叠测试", "first.1": "第一章", "collapseDisabled": true, "expandDisabled": false }, "screenshot": true },
+    { "name": "open-one-chapter", "do": "outline", "action": "toggle", "text": "第三章", "expect": { "rows": 16, "folded.length": 23 } },
+    { "name": "open-nested-section", "do": "outline", "action": "toggle", "text": "第三章 第二节", "expect": { "rows": 18, "collapseDisabled": false, "expandDisabled": false } },
+    { "name": "expand-all", "do": "outline", "action": "expandAll", "expect": { "rows": 73, "folded.length": 0, "expandDisabled": true } },
+    { "name": "go-to-deep-heading", "do": "outline", "action": "go", "text": "第五章 第二节 要点乙", "expect": { "active": "第五章 第二节 要点乙", "activeRow": "第五章 第二节 要点乙" } },
+    { "name": "folded-current-marks-ancestor", "do": "outline", "action": "collapseAll", "expect": { "active": "第五章 第二节 要点乙", "activeRow": "第五章" }, "screenshot": true },
+    { "name": "mark-scroll", "do": "outline", "action": "mark" },
+    { "name": "mouse-twisty-folds-title", "do": "mouse", "selector": "#outline .outline-twisty[title]" },
+    { "name": "twisty-does-not-navigate", "do": "outline", "expect": { "rows": 1, "folded.length": 25, "activeRow": "大纲折叠测试", "docScrollMoved": { "max": 2 } } },
+    { "name": "mouse-twisty-unfolds-title", "do": "mouse", "selector": "#outline .outline-twisty[title]" },
+    { "name": "title-open-again", "do": "outline", "expect": { "rows": 13, "activeRow": "第五章" } },
+    { "name": "filter-ignores-folds", "do": "outline", "action": "filter", "query": "小结", "expect": { "rows": 12, "twisties": 0, "collapseDisabled": true, "expandDisabled": true } },
+    { "name": "filter-cleared", "do": "outline", "action": "filter", "query": "", "expect": { "rows": 13, "folded.length": 24 } },
+    { "name": "mark-scroll-2", "do": "outline", "action": "mark" },
+    { "name": "mouse-row-text-navigates", "do": "mouse", "selector": "#outline .outline-item:nth-child(3) .outline-text" },
+    { "name": "row-click-went-there", "do": "outline", "expect": { "active": "第二章", "rows": 13, "docScrollMoved": { "min": 100 } } },
+
+    { "name": "chat-open", "do": "open", "path": "${fixtures}\\wechat\\聊天记录归档\\01_个人私聊\\测试 联系人🍎\\聊天记录\\2026-09_001.md", "expect": { "view.chatView": true } },
+    { "name": "chat-days-no-fold-controls", "do": "outline", "expect": { "rows": 2, "buttonsShown": false, "twisties": 0 } },
+    { "name": "chat-close-tab", "do": "closeTab" },
+    { "name": "tab-back-keeps-folds", "do": "outline", "expect": { "items": 73, "rows": 13, "folded.length": 24 } },
+
+    { "name": "watch-create", "do": "writeFile", "path": "${tmp}\\outline-watch.md", "content": "# 根\n\n## 甲\n\n### 甲一\n\n## 乙\n\n### 乙一\n" },
+    { "name": "watch-open", "do": "open", "path": "${tmp}\\outline-watch.md", "expect": { "view.meta.headings": 5 } },
+    { "name": "watch-fold", "do": "outline", "action": "toggle", "text": "甲", "expect": { "rows": 4 } },
+    { "name": "watch-seq", "do": "renderSeq" },
+    { "name": "watch-append", "do": "writeFile", "path": "${tmp}\\outline-watch.md", "append": true, "content": "\n## 丙\n" },
+    { "name": "watch-rerender", "do": "waitRender", "after": 1, "expect": { "rerendered": true } },
+    { "name": "rerender-keeps-folds", "do": "outline", "expect": { "items": 6, "rows": 5, "folded.0": "甲" } },
+    { "name": "navigate-new-document", "do": "navigate", "path": "${fixtures}\\outline\\fold.md" },
+    { "name": "new-document-unfolded", "do": "outline", "expect": { "items": 73, "rows": 73, "folded.length": 0 } },
+
+    { "name": "minimize", "do": "windowState", "state": "minimize", "expect": { "minimized": true } },
+    { "name": "steps-run-while-minimized", "do": "outline", "action": "collapseAll", "stepTimeout": 8000, "expect": { "rows": 13 } },
+    { "name": "restore", "do": "windowState", "state": "restore", "expect": { "minimized": false, "visibility": "visible" } },
+    { "name": "unfold-again", "do": "outline", "action": "expandAll", "expect": { "rows": 73 } },
+
+    { "name": "wide-size", "do": "windowSize", "width": 3400, "height": 1350, "expect": { "cssWidth": { "min": 3000 } } },
+    { "name": "wide-collapsed", "do": "outline", "action": "collapseAll", "expect": { "rows": 13 } },
+    { "name": "wide-open-chapter", "do": "outline", "action": "toggle", "text": "第四章", "expect": { "rows": 16 }, "screenshot": true },
+    { "name": "dark-theme", "do": "setTheme", "theme": "dark", "expect": { "dark": true } },
+    { "name": "wide-dark", "do": "wait", "ms": 300, "screenshot": true },
+    { "name": "light-theme", "do": "setTheme", "theme": "light", "expect": { "dark": false } },
+    { "name": "normal-size", "do": "windowSize", "width": 1440, "height": 900, "expect": { "cssWidth": 1440 } },
+    { "name": "normal-screenshot", "do": "wait", "ms": 300, "screenshot": true }
+  ]
+}

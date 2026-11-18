@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>登录 - MD Viewer</title>
+    <link rel="stylesheet" href="/assets/login.css" />
+    <script type="module" src="/assets/login.js"></script>
+  </head>
+  <body>
+    <main class="box">
+      <h1>MD Viewer</h1>
+      <form id="login" hidden>
+        <label>密码<input id="pw" type="password" autocomplete="current-password" required /></label>
+        <button type="submit">登录</button>
+      </form>
+      <form id="setup" hidden>
+        <p class="muted">还没有设置密码。设置码在容器日志里，以「首次设置码」开头的那一行。</p>
+        <label>设置码<input id="code" type="text" autocomplete="one-time-code" required /></label>
+        <label>新密码（至少 8 个字符）<input id="pw1" type="password" autocomplete="new-password" minlength="8" required /></label>
+        <label>再输入一次<input id="pw2" type="password" autocomplete="new-password" minlength="8" required /></label>
+        <button type="submit">设置密码并登录</button>
+      </form>
+      <p id="msg" class="msg" role="alert"></p>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "outDir": "test/output/selftest-cli",
+  "steps": [
+    { "name": "cold-start-target", "do": "waitTarget", "path": "${fixtures}\\wechat\\聊天记录月报\\2026-09\\月报_2026-09.md", "anchor": "一页速览", "timeout": 30000, "expect": { "found": true, "anchorVisible": true } },
+    { "name": "handoff-path-hash-anchor", "do": "waitTarget", "path": "${fixtures}\\wechat\\聊天记录归档\\01_个人私聊\\测试 联系人🍎\\聊天记录\\2026-09_001.md", "anchor": "msg-0000000000000000000000a7", "timeout": 30000, "expect": { "found": true, "anchorVisible": true } },
+    { "name": "handoff-relative-hash-dir", "do": "waitTarget", "path": "${fixtures}\\gfm\\sub#dir\\inner file.md", "timeout": 30000, "expect": { "found": true } },
+    { "name": "handoff-anchor-option", "do": "waitTarget", "path": "${fixtures}\\wechat\\聊天记录归档\\01_个人私聊\\#\\聊天记录\\2026-09_001.md", "anchor": "msg-00000000000000000000hash2", "timeout": 30000, "expect": { "found": true, "anchorVisible": true }, "screenshot": true }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "outDir": "test/output/selftest",
+  "steps": [
+    { "name": "commonmark", "do": "open", "path": "${fixtures}\\gfm\\01-commonmark.md", "expect": { "view.error": null, "view.meta.headings": { "min": 6 } } },
+    { "name": "gfm", "do": "open", "path": "${fixtures}\\gfm\\02-gfm.md", "expect": { "view.error": null }, "screenshot": true },
+    { "name": "code-math-mermaid-open", "do": "open", "path": "${fixtures}\\gfm\\03-code-math-mermaid.md", "expect": { "view.error": null } },
+    { "name": "mermaid-scroll", "do": "scrollTo", "selector": "pre.mdv-mermaid, .mdv-mermaid-svg", "index": 0 },
+    { "name": "mermaid-render", "do": "wait", "ms": 2500, "screenshot": true },
+    { "name": "html-security", "do": "open", "path": "${fixtures}\\gfm\\04-html-security.md", "expect": { "view.error": null }, "screenshot": true },
+    { "name": "front-matter", "do": "open", "path": "${fixtures}\\gfm\\05-front-matter.md", "expect": { "view.error": null } },
+    { "name": "images-open", "do": "open", "path": "${fixtures}\\gfm\\06-images-links.md", "expect": { "view.error": null } },
+    { "name": "images-loaded", "do": "media", "expect": { "probe.ok": 3, "probe.missing.length": 1, "visibleImages.broken.length": 0 }, "screenshot": true },
+    { "name": "find-in-page", "do": "find", "query": "图片", "expect": { "matches": { "min": 4 } }, "screenshot": true },
+    { "name": "find-close", "do": "closeFind" },
+
+    { "name": "report-open", "do": "open", "path": "${fixtures}\\wechat\\聊天记录月报\\2026-09\\月报_2026-09.md", "expect": { "view.meta.refs": 13 } },
+    { "name": "peek-plain", "do": "clickRef", "index": 0, "expect": { "peekOpen": true, "targetShown": true, "targetVisible": true, "messagesInPeek": { "min": 3 } }, "screenshot": true },
+    { "name": "peek-media", "do": "clickRef", "index": 3, "expect": { "targetShown": true, "peekSub": { "includes": "第 5 / 12 条" } }, "screenshot": true },
+    { "name": "peek-hash-folder", "do": "clickRef", "index": 5, "expect": { "targetShown": true, "peekTitle": "#" } },
+    { "name": "peek-percent-encoded", "do": "clickRef", "index": 6, "expect": { "targetShown": true } },
+    { "name": "ref-missing-file", "do": "clickRef", "index": 7, "timeout": 1200, "expect": { "toast": { "includes": "文件不存在" } } },
+    { "name": "ref-missing-anchor", "do": "clickRef", "index": 8, "timeout": 1500, "expect": { "targetShown": false, "peekSub": { "includes": "没有 #msg-ffffffffffffffffffffffff" } } },
+    { "name": "peek-from-table", "do": "clickRef", "index": 11, "expect": { "targetShown": true } },
+    { "name": "peek-open-here", "do": "peekOpenHere", "expect": { "anchorVisible": true, "highlighted": true, "view.chatView": true, "historyLength": 2 }, "screenshot": true },
+    { "name": "back-restores-position", "do": "back", "expect": { "historyIndex": 0, "refVisible": true, "refOffsetDelta": { "max": 24 } } },
+
+    { "name": "chat-anchor", "do": "open", "path": "${fixtures}\\wechat\\聊天记录归档\\01_个人私聊\\测试 联系人🍎\\聊天记录\\2026-09_001.md", "anchor": "msg-0000000000000000000000a5", "expect": { "anchorFound": true, "anchorVisible": true, "anchorHighlighted": true, "view.chatView": true, "view.meta.messages": 12, "view.meta.days": 2 } },
+    { "name": "chat-media", "do": "media", "expect": { "inlineImages": 2, "inlineVideos": 2, "inlineAudios": 1, "probe.ok": 5, "probe.missing.length": 1, "visibleImages.broken.length": 0 }, "screenshot": true },
+    { "name": "chat-audio-player", "do": "rect", "selector": "audio.mdv-inline-audio", "expect": { "found": true, "height": { "min": 30 }, "width": { "min": 200 } } },
+    { "name": "chat-raw-view", "do": "setChatView", "on": false, "expect": { "chatView": false }, "screenshot": true },
+    { "name": "chat-view-again", "do": "setChatView", "on": true, "expect": { "chatView": true } },
+    { "name": "hash-folder-chat", "do": "open", "path": "${fixtures}\\wechat\\聊天记录归档\\01_个人私聊\\#\\聊天记录\\2026-09_001.md", "anchor": "msg-00000000000000000000hash2", "expect": { "anchorFound": true, "anchorVisible": true } },
+
+    { "name": "file-url-links", "do": "open", "path": "${fixtures}\\large\\file-url-links.md", "requires": "${fixtures}\\large\\file-url-links.md", "expect": { "view.meta.refs": 4 } },
+    { "name": "file-url-encoded", "do": "clickRef", "index": 0, "requires": "${fixtures}\\large\\file-url-links.md", "expect": { "targetShown": true } },
+    { "name": "file-url-raw", "do": "clickRef", "index": 1, "requires": "${fixtures}\\large\\file-url-links.md", "expect": { "targetShown": true } },
+    { "name": "file-url-hash", "do": "clickRef", "index": 2, "requires": "${fixtures}\\large\\file-url-links.md", "expect": { "targetShown": true } },
+    { "name": "windows-path-link", "do": "clickRef", "index": 3, "requires": "${fixtures}\\large\\file-url-links.md", "expect": { "targetShown": true } },
+    { "name": "close-peek", "do": "closePeek" },
+
+    { "name": "big-generic-open", "do": "open", "path": "${fixtures}\\large\\big-generic.md", "requires": "${fixtures}\\large\\big-generic.md", "expect": { "openMs": { "max": 8000 }, "view.meta.chunks": { "min": 50 } } },
+    { "name": "big-generic-scroll", "do": "scrollPerf", "steps": 40, "requires": "${fixtures}\\large\\big-generic.md", "expect": { "p95Ms": { "max": 120 } } },
+    { "name": "big-generic-find", "do": "find", "query": "性能", "requires": "${fixtures}\\large\\big-generic.md", "expect": { "matches": { "min": 1000 } }, "screenshot": true },
+    { "name": "find-close-2", "do": "closeFind" },
+    { "name": "big-chat-anchor", "do": "open", "path": "${fixtures}\\large\\big-chat.md", "anchor": "msg-000000000000000000001194", "requires": "${fixtures}\\large\\big-chat.md", "expect": { "openMs": { "max": 6000 }, "anchorFound": true, "anchorVisible": true, "view.meta.messages": 9000 }, "screenshot": true },
+    { "name": "big-chat-find", "do": "find", "query": "大文件", "requires": "${fixtures}\\large\\big-chat.md", "expect": { "matches": { "min": 1000 } } },
+    { "name": "big-chat-find-close", "do": "closeFind" },
+    { "name": "big-chat-scroll", "do": "scrollPerf", "steps": 40, "requires": "${fixtures}\\large\\big-chat.md", "expect": { "p95Ms": { "max": 120 } } },
+    { "name": "big-chat-reload-keeps-position", "do": "reloadKeepsPosition", "requires": "${fixtures}\\large\\big-chat.md", "expect": { "samePlace": true } },
+
+    { "name": "watch-create", "do": "writeFile", "path": "${tmp}\\watch-test.md", "content": "# 监视测试\n\n第一版内容。\n" },
+    { "name": "watch-open", "do": "open", "path": "${tmp}\\watch-test.md", "expect": { "view.error": null } },
+    { "name": "watch-seq", "do": "renderSeq" },
+    { "name": "watch-append", "do": "writeFile", "path": "${tmp}\\watch-test.md", "append": true, "content": "\n追加的段落 ABC。\n" },
+    { "name": "watch-rerender", "do": "waitRender", "after": 1, "expect": { "rerendered": true, "text": { "includes": "追加的段落 ABC" } } },
+
+    { "name": "dark-theme", "do": "setTheme", "theme": "dark", "expect": { "dark": true } },
+    { "name": "dark-gfm", "do": "open", "path": "${fixtures}\\gfm\\02-gfm.md", "screenshot": true },
+    { "name": "dark-chat", "do": "open", "path": "${fixtures}\\wechat\\聊天记录归档\\01_个人私聊\\测试 联系人🍎\\聊天记录\\2026-09_001.md", "anchor": "msg-0000000000000000000000a2", "screenshot": true },
+    { "name": "light-theme", "do": "setTheme", "theme": "light", "expect": { "dark": false } }
+  ]
+}

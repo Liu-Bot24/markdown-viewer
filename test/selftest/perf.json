@@ -1,0 +1,15 @@
+{
+  "outDir": "test/output/selftest-perf",
+  "steps": [
+    { "name": "big-generic-open", "do": "open", "path": "${fixtures}\\large\\big-generic.md", "requires": "${fixtures}\\large\\big-generic.md", "expect": { "openMs": { "max": 8000 } } },
+    { "name": "big-generic-scroll", "do": "scrollPerf", "steps": 40, "requires": "${fixtures}\\large\\big-generic.md", "expect": { "p95Ms": { "max": 120 } } },
+    { "name": "big-generic-scroll-again", "do": "scrollPerf", "steps": 40, "requires": "${fixtures}\\large\\big-generic.md", "expect": { "p95Ms": { "max": 120 } } },
+    { "name": "big-generic-find", "do": "find", "query": "性能", "requires": "${fixtures}\\large\\big-generic.md", "expect": { "matches": { "min": 1000 } } },
+    { "name": "find-close", "do": "closeFind" },
+    { "name": "big-chat-anchor", "do": "open", "path": "${fixtures}\\large\\big-chat.md", "anchor": "msg-000000000000000000001194", "requires": "${fixtures}\\large\\big-chat.md", "expect": { "openMs": { "max": 6000 }, "anchorFound": true, "anchorVisible": true } },
+    { "name": "big-chat-scroll", "do": "scrollPerf", "steps": 40, "requires": "${fixtures}\\large\\big-chat.md", "expect": { "p95Ms": { "max": 120 } } },
+    { "name": "big-chat-find", "do": "find", "query": "大文件", "requires": "${fixtures}\\large\\big-chat.md", "expect": { "matches": { "min": 1000 } } },
+    { "name": "big-chat-reload", "do": "reloadKeepsPosition", "requires": "${fixtures}\\large\\big-chat.md", "expect": { "samePlace": true } },
+    { "name": "find-close-2", "do": "closeFind" }
+  ]
+}
