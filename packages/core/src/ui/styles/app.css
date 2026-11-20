@@ -982,6 +982,9 @@ body.no-outline .resizer[data-for='outline'] {
 .fv-body {
   position: relative;
   margin-top: 6px;
+  /* rows drop their date, then their size, by the list's own width: the window can be wide
+     while the reading pane is narrow (sidebar and outline open) */
+  container-type: inline-size;
 }
 .fv-body:not(.grid) {
   max-width: 1100px;
@@ -1061,9 +1064,12 @@ body.no-outline .resizer[data-for='outline'] {
   width: 20px;
   text-align: center;
 }
+.fv-row {
+  overflow: hidden;
+}
 .fv-row .fv-name {
   flex: 0 1 auto;
-  min-width: 0;
+  min-width: min(4em, 40%);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1151,7 +1157,14 @@ body.no-outline .resizer[data-for='outline'] {
   .fv-article {
     padding: 16px 16px 60px;
   }
+}
+@container (max-width: 540px) {
   .fv-row .fv-date {
+    display: none;
+  }
+}
+@container (max-width: 360px) {
+  .fv-row .fv-size {
     display: none;
   }
 }

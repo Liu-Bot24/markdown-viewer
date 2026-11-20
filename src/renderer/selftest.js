@@ -460,6 +460,10 @@ export function install(app) {
           imgsLoaded: imgs.filter((i) => i.complete && i.naturalWidth > 0).length,
           playing: !!(v.player && !v.player.paused),
           bodyWidth: Math.round(v.body.getBoundingClientRect().width),
+          // list rows: the narrowest file name, and how many rows still show a date and a size
+          nameMinWidth: (() => { const w = [...v.body.querySelectorAll('.fv-row .fv-name')].map((n) => n.getBoundingClientRect().width); return w.length ? Math.round(Math.min(...w)) : null; })(),
+          datesShown: [...v.body.querySelectorAll('.fv-row .fv-date')].filter((d) => d.offsetWidth > 0).length,
+          sizesShown: [...v.body.querySelectorAll('.fv-row .fv-size')].filter((d) => d.offsetWidth > 0).length,
           paneWidth: Math.round(v.el.clientWidth),
         });
       }

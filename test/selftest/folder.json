@@ -656,6 +656,94 @@
    "expect": {
     "view.path": "${tmp}\\fv\\语音"
    }
+  },
+  {
+   "name": "voice-wide-rows",
+   "do": "fvWait",
+   "kind": "folder",
+   "expect": {
+    "path": "${tmp}\\fv\\语音",
+    "datesShown": 2,
+    "sizesShown": 2,
+    "nameMinWidth": {
+     "min": 150
+    }
+   }
+  },
+  {
+   "name": "window-medium",
+   "do": "windowSize",
+   "width": 1000,
+   "height": 900
+  },
+  {
+   "name": "medium-rows-drop-date",
+   "do": "fvState",
+   "expect": {
+    "datesShown": 0,
+    "sizesShown": 2,
+    "nameMinWidth": {
+     "min": 100
+    },
+    "bodyWidth": {
+     "min": 361,
+     "max": 540
+    }
+   }
+  },
+  {
+   "name": "window-narrow",
+   "do": "windowSize",
+   "width": 780,
+   "height": 900
+  },
+  {
+   "name": "narrow-rows-keep-names",
+   "do": "fvState",
+   "expect": {
+    "datesShown": 0,
+    "sizesShown": 0,
+    "nameMinWidth": {
+     "min": 60
+    },
+    "bodyWidth": {
+     "max": 360
+    }
+   },
+   "screenshot": true
+  },
+  {
+   "name": "window-smallest",
+   "do": "windowSize",
+   "width": 640,
+   "height": 900
+  },
+  {
+   "name": "smallest-rows-keep-names",
+   "do": "fvState",
+   "expect": {
+    "datesShown": 0,
+    "sizesShown": 0,
+    "nameMinWidth": {
+     "min": 30
+    }
+   },
+   "screenshot": true
+  },
+  {
+   "name": "window-wide-again",
+   "do": "windowSize",
+   "width": 2400,
+   "height": 1300,
+   "settle": 600
+  },
+  {
+   "name": "wide-rows-again",
+   "do": "fvState",
+   "expect": {
+    "datesShown": 2,
+    "sizesShown": 2
+   }
   }
  ]
 }
