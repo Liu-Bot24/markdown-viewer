@@ -566,6 +566,96 @@
    "keys": [
     "Escape"
    ]
+  },
+  {
+   "name": "open-index-for-tree",
+   "do": "open",
+   "path": "${tmp}\\fv\\索引.md",
+   "expect": {
+    "view.error": null
+   }
+  },
+  {
+   "name": "tree-click-voice",
+   "do": "mouse",
+   "selector": ".tree-item[title$=\"语音\"] .tree-label",
+   "settle": 300
+  },
+  {
+   "name": "tree-voice-opened",
+   "do": "fvWait",
+   "kind": "folder",
+   "expect": {
+    "path": "${tmp}\\fv\\语音",
+    "layout": "list",
+    "items": 2,
+    "tree.open": {
+     "includes": "语音"
+    },
+    "tree.current": "语音"
+   },
+   "screenshot": true
+  },
+  {
+   "name": "tree-click-voice-again",
+   "do": "mouse",
+   "selector": ".tree-item[title$=\"语音\"] .tree-label",
+   "settle": 400
+  },
+  {
+   "name": "tree-voice-collapsed",
+   "do": "fvState",
+   "expect": {
+    "kind": "folder",
+    "path": "${tmp}\\fv\\语音",
+    "tree.open": {
+     "excludes": "语音"
+    }
+   }
+  },
+  {
+   "name": "tree-arrow-pictures",
+   "do": "mouse",
+   "selector": ".tree-item[title$=\"图片\"] .twisty",
+   "settle": 400
+  },
+  {
+   "name": "tree-arrow-only-expands",
+   "do": "fvState",
+   "expect": {
+    "kind": "folder",
+    "path": "${tmp}\\fv\\语音",
+    "tree.open": {
+     "includes": "图片"
+    }
+   }
+  },
+  {
+   "name": "tree-click-pictures",
+   "do": "mouse",
+   "selector": ".tree-item[title$=\"图片\"] .tree-label",
+   "settle": 300
+  },
+  {
+   "name": "tree-pictures-opened",
+   "do": "fvWait",
+   "kind": "folder",
+   "settle": 800,
+   "expect": {
+    "path": "${tmp}\\fv\\图片",
+    "total": 7,
+    "tree.open": {
+     "includes": "图片"
+    },
+    "tree.current": "图片"
+   }
+  },
+  {
+   "name": "tree-back",
+   "do": "back",
+   "expect": {
+    "view.path": "${tmp}\\fv\\语音"
+   }
   }
  ]
 }

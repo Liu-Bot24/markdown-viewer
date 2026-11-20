@@ -437,6 +437,12 @@ export function install(app) {
         status: document.getElementById('status-right').textContent,
         toast: (() => { const t = document.getElementById('toast'); return t && t.classList.contains('show') ? t.textContent : ''; })(),
         lb: { open: lb.isOpen, count: lb.counter.textContent, caption: lb.caption.textContent, locate: !!lb.locateBtn && !lb.locateBtn.hidden && lb.locateBtn.offsetParent !== null },
+        // folder tree: names of the expanded folders and of the highlighted item
+        tree: {
+          open: [...app.tree.nodes.values()].filter((n) => n.open && n.el).map((n) => n.el.querySelector('.tree-label').textContent).join(','),
+          current: (() => { const c = document.querySelector('.tree-item.current .tree-label'); return c ? c.textContent : ''; })(),
+        },
+        tabs: app.tabs.tabs.length,
       };
       if (v && v.kind === 'folder') {
         const imgs = [...v.body.querySelectorAll('img')];

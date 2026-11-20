@@ -160,6 +160,18 @@ const steps = [
   { name: 'open-plain-picture', do: 'mouse', selector: '.doc-root.active .fv-tile', settle: 800 },
   { name: 'plain-viewer-without-locate', do: 'fvState', expect: { 'lb.open': true, 'lb.locate': false } },
   { name: 'esc-plain', do: 'keys', keys: ['Escape'] },
+
+  // a folder clicked in the tree opens in the reading pane and expands; its arrow only toggles
+  { name: 'open-index-for-tree', do: 'open', path: `${D}\\索引.md`, expect: { 'view.error': null } },
+  { name: 'tree-click-voice', do: 'mouse', selector: '.tree-item[title$="语音"] .tree-label', settle: 300 },
+  { name: 'tree-voice-opened', do: 'fvWait', kind: 'folder', expect: { path: `${D}\\语音`, layout: 'list', items: 2, 'tree.open': { includes: '语音' }, 'tree.current': '语音' }, screenshot: true },
+  { name: 'tree-click-voice-again', do: 'mouse', selector: '.tree-item[title$="语音"] .tree-label', settle: 400 },
+  { name: 'tree-voice-collapsed', do: 'fvState', expect: { kind: 'folder', path: `${D}\\语音`, 'tree.open': { excludes: '语音' } } },
+  { name: 'tree-arrow-pictures', do: 'mouse', selector: '.tree-item[title$="图片"] .twisty', settle: 400 },
+  { name: 'tree-arrow-only-expands', do: 'fvState', expect: { kind: 'folder', path: `${D}\\语音`, 'tree.open': { includes: '图片' } } },
+  { name: 'tree-click-pictures', do: 'mouse', selector: '.tree-item[title$="图片"] .tree-label', settle: 300 },
+  { name: 'tree-pictures-opened', do: 'fvWait', kind: 'folder', settle: 800, expect: { path: `${D}\\图片`, total: 7, 'tree.open': { includes: '图片' }, 'tree.current': '图片' } },
+  { name: 'tree-back', do: 'back', expect: { 'view.path': `${D}\\语音` } },
 ];
 const spec = { outDir: 'test/output/selftest-folder', steps };
 fs.writeFileSync(path.join(root, 'test', 'selftest', 'folder.json'), JSON.stringify(spec, null, 1) + '\n');

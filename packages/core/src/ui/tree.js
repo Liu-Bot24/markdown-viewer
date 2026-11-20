@@ -99,9 +99,18 @@ export class FolderTree {
 
   onClick(node, e) {
     if (node.isDir) {
+      // a click expands the folder and opens it in the reading pane; clicking the folder already
+      // shown collapses it; the arrow only expands or collapses; Ctrl+click opens a new tab
       this.selectedDir = node.path;
-      if (node.open) this.collapse(node);
-      else this.expand(node);
+      const v = this.app.activeView;
+      const shown = v && v.kind === 'folder' && sameFile(v.path, node.path);
+      if (e.target.closest('.twisty')) node.open ? this.collapse(node) : this.expand(node);
+      else if (e.ctrlKey) this.app.openFolder(node.path, { newTab: true });
+      else if (!node.open) {
+        this.expand(node);
+        if (!shown) this.app.openFolder(node.path);
+      } else if (shown) this.collapse(node);
+      else this.app.openFolder(node.path);
     } else if (node.isMd) this.app.openPath(node.path, { newTab: e.ctrlKey });
     else this.app.openEntry(node, { newTab: e.ctrlKey });
   }
