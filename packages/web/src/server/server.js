@@ -178,7 +178,7 @@ export class WebServer {
       }
       if (p.startsWith('/api/')) {
         // status polls and the page's own change checks are not someone reading
-        if (!p.startsWith('/api/index') && !p.startsWith('/api/jobs') && p !== '/api/stats') this.activity.touch();
+        if (!p.startsWith('/api/index') && !p.startsWith('/api/jobs') && p !== '/api/info-batch' && p !== '/api/stats') this.activity.touch();
         return await this.api(req, res, p, url);
       }
       this.activity.touch();
@@ -250,12 +250,16 @@ export class WebServer {
       case '/api/list':
         if (GET) return this.apiList(req, res, q);
         break;
+      // File details. Not "stat": blocklists (EasyPrivacy) drop any "/api/stat?" request as
+      // tracking. The old names stay for pages loaded before the rename.
+      case '/api/info':
       case '/api/stat':
         if (GET) return sendJson(req, res, 200, await this.statOne(q.get('path')));
         break;
       case '/api/neighbors':
         if (GET) return this.apiNeighbors(req, res, q.get('path'));
         break;
+      case '/api/info-batch':
       case '/api/stats': {
         if (GET) break;
         const body = await readJson(req, 1024 * 1024);

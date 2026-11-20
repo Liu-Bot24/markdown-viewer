@@ -192,7 +192,7 @@ export function createShim(serverState) {
     if (!paths.length || document.visibilityState !== 'visible') return;
     let r;
     try {
-      r = await apiJson('/api/stats', { method: 'POST', body: { paths } });
+      r = await apiJson('/api/info-batch', { method: 'POST', body: { paths } });
     } catch {
       return;
     }
@@ -354,7 +354,7 @@ export function createShim(serverState) {
     async stat(p) {
       if (isLocalPath(p)) return localStat(p);
       try {
-        return await apiJson('/api/stat?path=' + encodeURIComponent(p));
+        return await apiJson('/api/info?path=' + encodeURIComponent(p));
       } catch {
         return { ok: false, code: 'ENET' };
       }

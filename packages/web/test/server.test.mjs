@@ -47,6 +47,26 @@ test('the folder page listing: every file with size and time, paged, with year j
   assert.equal(plain.entries[1].size, undefined, 'the tree listing stays as it was');
 });
 
+test('file details: one path, a batch, and the old names for pages loaded before the rename', async () => {
+  const one = await (await s.f('/api/info?path=' + encodeURIComponent('/notes'))).json();
+  assert.deepEqual([one.ok, one.isDir], [true, true]);
+  const missing = await (await s.f('/api/info?path=' + encodeURIComponent('/notes/nope'))).json();
+  assert.equal(missing.ok, false);
+  const batch = await (await s.f('/api/info-batch', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ paths: ['/notes', '/notes/page.html'] }) })).json();
+  assert.deepEqual([batch.results['/notes'].isDir, batch.results['/notes/page.html'].isFile], [true, true]);
+  assert.equal((await (await s.f('/api/stat?path=' + encodeURIComponent('/notes'))).json()).isDir, true);
+});
+
+test('the page never calls an address that common blocklists drop as tracking', () => {
+  // EasyPrivacy blocks these on every site; one of them once hid the folder lookup.
+  const blocked = ['/api/stat?', '/api/stats?', '/api/v1/stat?', '/api/track', '/api/pixel', '/api/pageview', '/api/log-visit', '/api/metrics', '/api/analytics'];
+  const dir = new URL('../src/shell/', import.meta.url);
+  for (const f of fs.readdirSync(dir).filter((n) => n.endsWith('.js'))) {
+    const src = fs.readFileSync(new URL(f, dir), 'utf8');
+    for (const b of blocked) assert.ok(!src.includes("'" + b) && !src.includes('`' + b), `${f} calls ${b}`);
+  }
+});
+
 test('state lists every mounted root with its write mode; login is off by default', async () => {
   const st = await (await s.f('/api/state')).json();
   assert.equal(st.auth, 'off');
