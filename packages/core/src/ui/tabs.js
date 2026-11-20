@@ -2,7 +2,12 @@
 // tab stay rendered (hidden) so going back is instant and keeps the exact position.
 import { h, toast } from './util.js';
 import { DocView } from './docview.js';
+import { FolderView, FileView } from './folderview.js';
 import { pathKey } from '../shared/paths.js';
+
+/** target.view: 'folder' (the folder page), 'file' (a text file or web page as it is), else a Markdown document. */
+const VIEWS = { folder: FolderView, file: FileView };
+const keyOf = (target) => (VIEWS[target.view] ? target.view + ':' : '') + pathKey(target.path);
 
 const MAX_VIEWS_PER_TAB = 5;
 let tabSeq = 0;
@@ -16,9 +21,9 @@ export class Tabs {
     this.closed = [];
   }
 
-  findByPath(path) {
-    const k = pathKey(path);
-    return this.tabs.find((t) => t.view && pathKey(t.view.path) === k) || null;
+  findByPath(path, view) {
+    const k = keyOf({ path, view });
+    return this.tabs.find((t) => t.view && keyOf({ path: t.view.path, view: t.view.kind }) === k) || null;
   }
 
   async open(target, { background = false } = {}) {
@@ -45,7 +50,7 @@ export class Tabs {
     if (tab.view && tab.view.dirty && !(await this.app.confirmDiscard(tab.view))) return false;
     const i = this.tabs.indexOf(tab);
     if (i === -1) return true;
-    if (tab.view) this.closed.push({ path: tab.view.path, anchor: '' });
+    if (tab.view) this.closed.push({ path: tab.view.path, anchor: '', view: tab.view.kind });
     this.closed = this.closed.slice(-20);
     for (const v of tab.views.values()) v.destroy();
     this.tabs.splice(i, 1);
@@ -80,7 +85,7 @@ export class Tabs {
 
   trimViews(tab) {
     if (tab.views.size <= MAX_VIEWS_PER_TAB) return;
-    const keep = new Set(tab.entries.slice(Math.max(0, tab.index - 2), tab.index + 2).map((e) => pathKey(e.path)));
+    const keep = new Set(tab.entries.slice(Math.max(0, tab.index - 2), tab.index + 2).map((e) => keyOf(e)));
     for (const [k, v] of [...tab.views.entries()].sort((a, b) => a[1].lastUsed - b[1].lastUsed)) {
       if (tab.views.size <= MAX_VIEWS_PER_TAB) break;
       if (v === tab.view || v.dirty || keep.has(k)) continue;
@@ -96,19 +101,19 @@ export class Tabs {
   async go(tab, target, { push = true, pos = null, checked = false } = {}) {
     if (!checked && !(await this.canLeave(tab, target.path))) return;
     const token = ++tab.nav;
-    const key = pathKey(target.path);
+    const key = keyOf(target);
     if (tab.view && tab.index >= 0) tab.entries[tab.index].pos = tab.view.capture();
     let view = tab.views.get(key);
     let fresh = false;
     if (!view) {
-      view = new DocView(this.app, target.path);
+      view = new (VIEWS[target.view] || DocView)(this.app, target.path);
       tab.views.set(key, view);
       fresh = true;
     }
     view.lastUsed = Date.now();
     if (push) {
       tab.entries = tab.entries.slice(0, tab.index + 1);
-      tab.entries.push({ path: target.path, anchor: target.anchor || '', pos: null });
+      tab.entries.push({ path: target.path, anchor: target.anchor || '', view: VIEWS[target.view] ? target.view : undefined, pos: null });
       tab.index = tab.entries.length - 1;
     }
     const prev = tab.view;
@@ -132,7 +137,7 @@ export class Tabs {
     if (token !== tab.nav) return;
     this.renderStrip();
     this.app.onViewChanged(tab);
-    if (view.meta) this.app.noteRecent(view.path);
+    if (view.meta && view.kind === 'doc') this.app.noteRecent(view.path);
     this.app.saveSession();
   }
 
@@ -142,7 +147,7 @@ export class Tabs {
     if (tab.view) tab.entries[tab.index].pos = tab.view.capture();
     tab.index--;
     const e = tab.entries[tab.index];
-    return this.go(tab, { path: e.path }, { push: false, pos: e.pos, checked: true });
+    return this.go(tab, { path: e.path, view: e.view }, { push: false, pos: e.pos, checked: true });
   }
 
   async forward(tab = this.active) {
@@ -151,7 +156,7 @@ export class Tabs {
     if (tab.view) tab.entries[tab.index].pos = tab.view.capture();
     tab.index++;
     const e = tab.entries[tab.index];
-    return this.go(tab, { path: e.path, anchor: e.pos ? '' : e.anchor }, { push: false, pos: e.pos, checked: true });
+    return this.go(tab, { path: e.path, anchor: e.pos ? '' : e.anchor, view: e.view }, { push: false, pos: e.pos, checked: true });
   }
 
   canBack(tab = this.active) {

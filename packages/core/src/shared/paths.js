@@ -171,6 +171,41 @@ export function mediaKind(p) {
   return null;
 }
 
+/** Plain-text files shown as text, and web pages shown with scripts off. */
+export const TEXT_EXTS = new Set(['.txt', '.text', '.log', '.csv', '.tsv', '.json', '.jsonl', '.xml', '.yaml', '.yml', '.toml', '.ini', '.cfg', '.conf', '.srt', '.vtt', '.lrc', '.js', '.mjs', '.ts', '.py', '.css', '.sql', '.sh', '.ps1', '.bat']);
+export const HTML_EXTS = new Set(['.html', '.htm', '.xhtml']);
+
+/** How a file that is neither Markdown nor media is shown inside the app: 'text', 'html' or null (not shown). */
+export function fileViewKind(p) {
+  const e = extname(p);
+  if (TEXT_EXTS.has(e)) return 'text';
+  if (HTML_EXTS.has(e)) return 'html';
+  return null;
+}
+
+/**
+ * Year jump points of a folder listing whose file names start with a date (YYYY-MM-DD…):
+ * [{ label: '2019', index }] with index into `entries`, or [] when most names carry no date.
+ */
+export function yearMarks(entries) {
+  const out = [];
+  let files = 0;
+  let dated = 0;
+  let last = '';
+  entries.forEach((e, i) => {
+    if (e.isDir) return;
+    files++;
+    const m = /^((?:19|20)\d\d)-[01]\d-[0-3]\d/.exec(e.name);
+    if (!m) return;
+    dated++;
+    if (m[1] !== last) {
+      last = m[1];
+      if (!out.some((x) => x.label === last)) out.push({ label: last, index: i });
+    }
+  });
+  return files && dated >= files * 0.8 && out.length > 1 ? out : [];
+}
+
 /**
  * Split "path#anchor" where the path itself may contain '#'.
  * Returns candidates in preference order: the first '#' as separator (standard URL

@@ -46,18 +46,23 @@ function lsSet(k, v) {
 
 export const encPath = (p) => p.split('/').map(encodeURIComponent).join('/');
 export const rawUrl = (p) => '/raw' + encPath(p);
-export const viewUrl = (p, anchor) => '/view' + encPath(p) + (anchor ? '#' + encodeURIComponent(anchor) : '');
+/** A document's URL; the folder page ends in '/', a file shown as it is carries ?as=file. */
+export const viewUrl = (p, anchor, view) =>
+  '/view' + encPath(p) + (view === 'folder' ? '/' : view === 'file' ? '?as=file' : '') + (anchor ? '#' + encodeURIComponent(anchor) : '');
 
 export function pathFromLocation(loc = location) {
   if (!loc.pathname.startsWith('/view/')) return null;
   try {
+    const folder = loc.pathname.length > 6 && loc.pathname.endsWith('/');
     const path = loc.pathname
       .slice(5)
+      .replace(/\/+$/, '')
       .split('/')
       .map((s) => decodeURIComponent(s))
       .join('/');
     const anchor = loc.hash ? decodeURIComponent(loc.hash.slice(1)) : '';
-    return { path, anchor };
+    const view = folder ? 'folder' : new URLSearchParams(loc.search).get('as') === 'file' ? 'file' : undefined;
+    return { path, anchor, view };
   } catch {
     return null;
   }
@@ -356,9 +361,11 @@ export function createShim(serverState) {
     },
 
     async listDir(dir, opts = {}) {
-      const hideMedia = !!settings.hideMediaFolders;
+      // the folder page (opts.details) shows every entry, media folders included
+      const hideMedia = !!settings.hideMediaFolders && !opts.details;
       if (isLocalPath(dir)) return localList(dir, { ...opts, hideMedia });
       const qs = new URLSearchParams({ path: dir, all: opts.all ? '1' : '0', offset: String(opts.offset || 0), hideMedia: hideMedia ? '1' : '0' });
+      if (opts.details) qs.set('details', '1');
       let r;
       try {
         r = await apiJson('/api/list?' + qs);
@@ -366,7 +373,7 @@ export function createShim(serverState) {
         return { ok: false, entries: [] };
       }
       if (!r.ok) return { ok: false, code: r.code, entries: [] };
-      if (dir === '/' && !opts.offset) {
+      if (dir === '/' && !opts.offset && !opts.details) {
         for (const s of localSources()) r.entries.push({ name: '本机：' + s.name, path: LOCAL_PREFIX + s.id, isDir: true, isMd: false, local: true });
       }
       return r;
@@ -483,13 +490,13 @@ export function createShim(serverState) {
     },
 
     // ---------- web-only extras used through capabilities ----------
-    linkFor(p, anchor) {
+    linkFor(p, anchor, view) {
       if (isLocalPath(p)) return null;
-      return location.origin + viewUrl(p, anchor);
+      return location.origin + viewUrl(p, anchor, view);
     },
     openInNewWindow(target) {
       if (isLocalPath(target.path)) return false;
-      window.open(viewUrl(target.path, target.anchor), '_blank');
+      window.open(viewUrl(target.path, target.anchor, target.view), '_blank');
       return true;
     },
     rootLabel(p) {

@@ -413,6 +413,47 @@ export function install(app) {
       return { found: true, width: Math.round(r.width), height: Math.round(r.height), display: cs.display, visibility: cs.visibility, opacity: cs.opacity };
     },
 
+    /** The active folder page or file view, and the viewer's stepping state. */
+    fvState() {
+      const v = app.activeView;
+      const lb = app.lightbox;
+      const out = { kind: v && v.kind, path: v && v.path, title: document.title, status: document.getElementById('status-right').textContent, lb: { open: lb.isOpen, count: lb.counter.textContent, caption: lb.caption.textContent } };
+      if (v && v.kind === 'folder') {
+        const imgs = [...v.body.querySelectorAll('img')];
+        Object.assign(out, {
+          layout: v.layout,
+          total: v.total,
+          items: v.items.length,
+          cols: v.cols,
+          cells: v.cells.size,
+          chips: [...v.head.querySelectorAll('.fv-chip')].map((b) => b.textContent).join(','),
+          years: [...v.head.querySelectorAll('.fv-year')].map((b) => b.textContent).join(','),
+          names: [...v.body.querySelectorAll('.fv-name')].map((n) => n.textContent).join('|'),
+          transcripts: [...v.body.querySelectorAll('.fv-transcript')].map((t) => t.textContent).join('|'),
+          imgs: imgs.length,
+          imgsLoaded: imgs.filter((i) => i.complete && i.naturalWidth > 0).length,
+          playing: !!(v.player && !v.player.paused),
+          bodyWidth: Math.round(v.body.getBoundingClientRect().width),
+          paneWidth: Math.round(v.el.clientWidth),
+        });
+      }
+      if (v && v.kind === 'file') {
+        const frame = v.article.querySelector('iframe');
+        Object.assign(out, { text: v.article.textContent.slice(0, 80), frame: !!frame, sandbox: frame ? frame.getAttribute('sandbox') : null, modeSeg: document.getElementById('mode-seg').style.display });
+      }
+      return out;
+    },
+
+    /** Wait until the active view is a `kind` view that finished loading. */
+    async fvWait({ kind, timeout = 10000, settle = 600 }) {
+      await waitFor(() => {
+        const v = app.activeView;
+        return v && v.kind === kind && (v.listed || v.info || v.meta || v.error);
+      }, timeout);
+      await sleep(settle);
+      return steps.fvState();
+    },
+
     /** Open the lightbox on a local image without going through a document. */
     async lbOpen({ path, timeout = 10000 }) {
       app.lightbox.open({ kind: 'image', path });

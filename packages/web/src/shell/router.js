@@ -10,7 +10,7 @@ export function installRouter(app, shim) {
   const urlFor = (view, tab) => {
     if (!view || isLocalPath(view.path)) return '/';
     const e = tab.entries[tab.index];
-    return viewUrl(view.path, e && e.anchor);
+    return viewUrl(view.path, e && e.anchor, view.kind);
   };
 
   shim.viewChanged = (view, tab) => {
@@ -19,7 +19,7 @@ export function installRouter(app, shim) {
       return;
     }
     const url = urlFor(view, tab);
-    const here = location.pathname + location.hash;
+    const here = location.pathname + location.search + location.hash;
     if (fromPop) {
       index = tab.index;
       if (url !== here) history.replaceState({ i: tab.index }, '', url);

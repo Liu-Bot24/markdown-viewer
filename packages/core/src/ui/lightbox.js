@@ -2,6 +2,7 @@
 // Images open fitted to the window; a click zooms to actual size around the clicked
 // point and another click fits again. A zoomed image pans by dragging or scrolling.
 // A click on the dark area around the media closes the viewer, like × and Esc.
+// Opened from a folder page, ‹ › and the arrow keys step through the folder.
 import { h, caps } from './util.js';
 import { toLocalResourceUrl, basename, hasPathHooks } from '../shared/paths.js';
 
@@ -11,10 +12,12 @@ export class Lightbox {
   constructor() {
     this.stage = h('div.lb-stage');
     this.caption = h('div.lb-caption');
+    this.counter = h('span.lb-count');
     this.bar = h(
       'div.lb-bar',
       null,
       this.caption,
+      this.counter,
       ...(caps().fileManager
         ? [
             h('button.btn.small', { onclick: () => this.path && window.mdv.openPath(this.path) }, '用默认程序打开'),
@@ -28,7 +31,17 @@ export class Lightbox {
     this.path = null;
     this.img = null;
     this.press = null; // the current pointer press: where it started and whether it became a drag
-    this.el = h('div.lightbox', null, this.bar, this.stage);
+    this.seq = null; // { index, count, step(dir) -> Promise<{ kind, path } | null> } when stepping through a folder
+    this.prevBtn = h('button.lb-side.prev', { title: '上一个（←）', onclick: () => this.step(-1) }, '‹');
+    this.nextBtn = h('button.lb-side.next', { title: '下一个（→）', onclick: () => this.step(1) }, '›');
+    this.el = h('div.lightbox', null, this.bar, this.stage, this.prevBtn, this.nextBtn);
+    document.addEventListener('keydown', (e) => {
+      if (!this.isOpen || !this.seq || e.altKey || e.ctrlKey || e.metaKey) return;
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      if (this.zoomed || (e.target.closest && e.target.closest('input, textarea, video, audio'))) return; // arrows pan or seek there
+      e.preventDefault();
+      this.step(e.key === 'ArrowLeft' ? -1 : 1);
+    });
     this.el.addEventListener('pointerdown', (e) => this.onDown(e));
     this.el.addEventListener('pointermove', (e) => this.onMove(e));
     this.el.addEventListener('pointerup', (e) => this.onUp(e));
@@ -44,9 +57,19 @@ export class Lightbox {
     return !!(this.img && this.img.classList.contains('actual'));
   }
 
-  /** src: a loadable URL; path: local path when known. */
-  open({ kind, src, path }) {
+  /** src: a loadable URL; path: local path when known; seq: the folder to step through. */
+  open({ kind, src, path, seq = null }) {
+    this.seq = seq;
+    this.show({ kind, src, path });
+  }
+
+  show({ kind, src, path }) {
     this.path = path || null;
+    const s = this.seq;
+    this.el.classList.toggle('stepping', !!s);
+    this.counter.textContent = s ? `${(s.index + 1).toLocaleString()} / ${s.count.toLocaleString()}` : '';
+    this.prevBtn.disabled = !s || s.index <= 0;
+    this.nextBtn.disabled = !s || s.index >= s.count - 1;
     this.caption.textContent = path ? basename(path) : src;
     this.caption.title = path || src;
     // the web shows reduced previews in documents: the viewer loads the original
@@ -65,7 +88,20 @@ export class Lightbox {
     this.el.classList.add('open');
   }
 
+  async step(dir) {
+    if (!this.seq || this.stepping) return;
+    this.stepping = true;
+    try {
+      const next = await this.seq.step(dir);
+      if (next && this.isOpen) this.show(next);
+      else if (!next) (dir < 0 ? this.prevBtn : this.nextBtn).disabled = true;
+    } finally {
+      this.stepping = false;
+    }
+  }
+
   close() {
+    this.seq = null;
     this.endPress();
     this.el.classList.remove('open');
     this.stage.replaceChildren();

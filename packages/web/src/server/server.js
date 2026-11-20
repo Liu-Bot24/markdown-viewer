@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { resolveHref, isMarkdownPath, basename, mediaKind } from '../../../core/src/shared/paths.js';
+import { resolveHref, isMarkdownPath, basename, mediaKind, yearMarks } from '../../../core/src/shared/paths.js';
 import { hashBytes } from '../../../core/src/node/textfile.js';
 import { Auth } from './auth.js';
 import { APP_CSP, baseHeaders, disposition, isInlineType, mimeOf, readJson, sendCompressed, sendError, sendFile, sendJson } from './http-util.js';
@@ -328,6 +328,7 @@ export class WebServer {
     const v = q.get('path') || '/';
     const all = q.get('all') === '1';
     const hideMedia = q.get('hideMedia') === '1';
+    const details = q.get('details') === '1';
     const offset = Math.max(0, Number(q.get('offset')) || 0);
     const limit = Math.min(LIST_PAGE, Math.max(1, Number(q.get('limit')) || LIST_PAGE));
     const r = await resolveVirtual(this.roots, v);
@@ -344,7 +345,21 @@ export class WebServer {
       entries = entries.filter((_, i) => !media[i]);
     }
     const page = entries.slice(offset, offset + limit);
-    return sendJson(req, res, 200, { ok: true, entries: page, total: entries.length, more: offset + limit < entries.length, offset, paged: true });
+    const out = { ok: true, entries: page, total: entries.length, more: offset + limit < entries.length, offset, paged: true };
+    if (details) {
+      // the folder page: size and modification time of this page's files, year jumps once
+      out.entries = await mapLimited(page, 16, async (e) => {
+        if (e.isDir) return e;
+        try {
+          const s = await fs.promises.stat(path.join(r.abs, e.name));
+          return { ...e, size: s.size, mtimeMs: s.mtimeMs };
+        } catch {
+          return e;
+        }
+      });
+      if (!offset) out.marks = yearMarks(entries);
+    }
+    return sendJson(req, res, 200, out);
   }
 
   /**

@@ -78,7 +78,7 @@ export class FolderTree {
           style: { paddingLeft: 8 + depth * 14 + 'px' },
           onclick: (e) => this.onClick(node, e),
           onauxclick: (e) => {
-            if (e.button === 1 && !node.isDir) this.app.openPath(node.path, { newTab: true });
+            if (e.button === 1 && !node.isDir) this.app.openEntry(node, { newTab: true });
           },
           oncontextmenu: (e) => {
             e.preventDefault();
@@ -103,7 +103,7 @@ export class FolderTree {
       if (node.open) this.collapse(node);
       else this.expand(node);
     } else if (node.isMd) this.app.openPath(node.path, { newTab: e.ctrlKey });
-    else window.mdv.openPath(node.path);
+    else this.app.openEntry(node, { newTab: e.ctrlKey });
   }
 
   async expand(node) {

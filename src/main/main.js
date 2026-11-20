@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { parseArgs, userArgs } from '../shared/cli.js';
-import { resolveHref, isMarkdownPath, basename } from '../../packages/core/src/shared/paths.js';
+import { resolveHref, isMarkdownPath, basename, yearMarks } from '../../packages/core/src/shared/paths.js';
 import { registerPrivilegedSchemes, registerProtocolHandlers } from './protocol.js';
 import { StateStore } from './state.js';
 import { FileWatchers } from './watcher.js';
@@ -16,6 +16,8 @@ const APP_ROOT = path.resolve(import.meta.dirname, '..', '..');
 const RENDERER_DIR = path.join(APP_ROOT, 'dist', 'renderer');
 const PRELOAD = path.join(APP_ROOT, 'src', 'preload', 'preload.cjs');
 const MAX_READ_BYTES = 64 * 1024 * 1024;
+const LIST_PAGE = 2000; // folder page listing: entries per request
+const NAME_ORDER = new Intl.Collator('zh-CN', { numeric: true, sensitivity: 'base' });
 // Opening these from a document link asks first: they execute code.
 const RISKY_EXTS = new Set([
   '.exe', '.bat', '.cmd', '.com', '.ps1', '.vbs', '.vbe', '.js', '.jse', '.wsf', '.wsh', '.msi', '.msix', '.scr',
@@ -272,7 +274,23 @@ function registerIpc() {
         if (!isDir && !isMd && !opts.all) continue;
         out.push({ name: d.name, path: full, isDir, isMd });
       }
-      return { ok: true, entries: out };
+      if (!opts.details) return { ok: true, entries: out };
+      // the folder page: sorted, one page at a time, with sizes, modification times and year jumps
+      out.sort((a, b) => (a.isDir !== b.isDir ? (a.isDir ? -1 : 1) : NAME_ORDER.compare(a.name, b.name)));
+      const offset = Math.max(0, Number(opts.offset) || 0);
+      const page = out.slice(offset, offset + LIST_PAGE);
+      const entries = await Promise.all(
+        page.map(async (e) => {
+          if (e.isDir) return e;
+          try {
+            const s = await fs.promises.stat(e.path);
+            return { ...e, size: s.size, mtimeMs: s.mtimeMs };
+          } catch {
+            return e;
+          }
+        }),
+      );
+      return { ok: true, entries, total: out.length, more: offset + LIST_PAGE < out.length, offset, paged: true, ...(offset ? {} : { marks: yearMarks(out) }) };
     } catch (e) {
       return { ok: false, code: e.code || 'EIO', entries: [] };
     }

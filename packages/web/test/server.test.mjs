@@ -25,6 +25,28 @@ after(async () => {
   fs.rmSync(dep.dir, { recursive: true, force: true });
 });
 
+test('the folder page listing: every file with size and time, paged, with year jumps on the first page', async () => {
+  const dir = path.join(dep.roots, 'notes', '相册');
+  fs.mkdirSync(path.join(dir, '预览'), { recursive: true });
+  const names = ['2019-02-12_142201_图片_000004.png', '2020-11-29_204017_图片_005227.jpg', '2021-01-01_000000_图片_000009.jpg'];
+  names.forEach((n, i) => fs.writeFileSync(path.join(dir, n), Buffer.alloc(10 + i)));
+  const r = await (await s.f('/api/list?path=' + encodeURIComponent('/notes/相册') + '&all=1&details=1')).json();
+  assert.equal(r.ok, true);
+  assert.equal(r.total, 4);
+  assert.deepEqual(
+    r.entries.map((e) => [e.name, e.isDir, e.size ?? null]),
+    [['预览', true, null], [names[0], false, 10], [names[1], false, 11], [names[2], false, 12]],
+  );
+  assert.ok(r.entries[1].mtimeMs > 0);
+  assert.deepEqual(r.marks.map((m) => [m.label, m.index]), [['2019', 1], ['2020', 2], ['2021', 3]]);
+  const page2 = await (await s.f('/api/list?path=' + encodeURIComponent('/notes/相册') + '&all=1&details=1&offset=2&limit=1')).json();
+  assert.deepEqual(page2.entries.map((e) => e.name), [names[1]]);
+  assert.equal(page2.more, true);
+  assert.equal(page2.marks, undefined, 'year jumps only come with the first page');
+  const plain = await (await s.f('/api/list?path=' + encodeURIComponent('/notes/相册') + '&all=1')).json();
+  assert.equal(plain.entries[1].size, undefined, 'the tree listing stays as it was');
+});
+
 test('state lists every mounted root with its write mode; login is off by default', async () => {
   const st = await (await s.f('/api/state')).json();
   assert.equal(st.auth, 'off');

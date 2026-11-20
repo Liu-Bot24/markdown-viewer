@@ -39,7 +39,7 @@ export class WebShell {
 
   /** Previous / next file in the current folder, in the order the tree lists them. */
   async updateNeighbors(view) {
-    const p = view && view.path;
+    const p = view && view.kind === 'doc' && view.path;
     this.neighbor = null;
     $('#btn-prev-file').disabled = true;
     $('#btn-next-file').disabled = true;
@@ -276,7 +276,7 @@ export class WebShell {
       'error',
       (e) => {
         const t = e.target;
-        if (t && t.tagName === 'VIDEO') tryTranscode(t);
+        if (t && t.tagName === 'VIDEO' && !t.closest('.fv')) tryTranscode(t); // folder thumbnails just show an icon
       },
       true,
     );
@@ -285,7 +285,7 @@ export class WebShell {
       'loadedmetadata',
       (e) => {
         const t = e.target;
-        if (t && t.tagName === 'VIDEO' && t.videoWidth === 0 && !t.dataset.mdvTranscode) tryTranscode(t);
+        if (t && t.tagName === 'VIDEO' && t.videoWidth === 0 && !t.dataset.mdvTranscode && !t.closest('.fv')) tryTranscode(t);
       },
       true,
     );

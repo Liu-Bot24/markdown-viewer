@@ -17,11 +17,12 @@
     "fixtures:large": "node scripts/make-large-fixtures.mjs",
     "selftest": "node scripts/build.mjs && electron . --selftest test/selftest/spec.json",
     "package": "node scripts/build.mjs && node scripts/package.mjs",
-    "test:e2e": "node scripts/build.mjs && electron . --selftest test/selftest/spec.json && electron . --selftest test/selftest/outline.json && node scripts/make-edit-spec.mjs && electron . --selftest test/selftest/edit.json && node scripts/make-lightbox-spec.mjs && electron . --selftest test/selftest/lightbox.json && node scripts/make-real-spec.mjs && electron . --selftest test/output/real.json && node scripts/cli-e2e.mjs",
+    "test:e2e": "node scripts/build.mjs && electron . --selftest test/selftest/spec.json && electron . --selftest test/selftest/outline.json && node scripts/make-edit-spec.mjs && electron . --selftest test/selftest/edit.json && node scripts/make-lightbox-spec.mjs && electron . --selftest test/selftest/lightbox.json && node scripts/make-folder-spec.mjs && electron . --selftest test/selftest/folder.json && node scripts/make-real-spec.mjs && electron . --selftest test/output/real.json && node scripts/cli-e2e.mjs",
     "icon": "python -I scripts/make_icon.py",
     "selftest:edit": "node scripts/build.mjs && node scripts/make-edit-spec.mjs && electron . --selftest test/selftest/edit.json",
     "selftest:outline": "node scripts/build.mjs && electron . --selftest test/selftest/outline.json",
-    "selftest:lightbox": "node scripts/build.mjs && node scripts/make-lightbox-spec.mjs && electron . --selftest test/selftest/lightbox.json"
+    "selftest:lightbox": "node scripts/build.mjs && node scripts/make-lightbox-spec.mjs && electron . --selftest test/selftest/lightbox.json",
+    "selftest:folder": "node scripts/build.mjs && node scripts/make-folder-spec.mjs && electron . --selftest test/selftest/folder.json"
   },
   "license": "MIT",
   "dependencies": {

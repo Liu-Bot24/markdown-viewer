@@ -10,6 +10,8 @@ import {
   resolveResourceSrc,
   mediaKind,
   isMarkdownPath,
+  fileViewKind,
+  yearMarks,
 } from '../../packages/core/src/shared/paths.js';
 
 const REPORT = 'X:\\示例月报\\2026-09\\月报_2026-09.md';
@@ -141,4 +143,29 @@ test('resource URLs go through the platform hooks when set', () => {
   }
   assert.match(toLocalResourceUrl('D:\\x.png'), /^mdvfile:/);
   assert.equal(resourceUrlToPath(toLocalResourceUrl('D:\\a b\\x.png')), 'D:\\a b\\x.png');
+});
+
+test('files shown in the app: text and web pages, nothing else', () => {
+  assert.equal(fileViewKind('C:\\a\\note.txt'), 'text');
+  assert.equal(fileViewKind('/r/x.JSON'), 'text');
+  assert.equal(fileViewKind('/r/笔记.html'), 'html');
+  for (const p of ['/r/a.pdf', '/r/a.docx', '/r/a.xlsx', '/r/a.wxgf', '/r/a', '/r/a.md']) assert.equal(fileViewKind(p), null, p);
+});
+
+test('year jumps come from dated file names, after the folders, and only when most names are dated', () => {
+  const ents = [
+    { name: '预览', isDir: true },
+    { name: '2019-02-12_142201_图片_000004.png' },
+    { name: '2019-03-01_000000_图片_000005.jpg' },
+    { name: '2020-11-29_204017_图片_005227.jpg' },
+    { name: '2026-10-18_184820_图片_086840.jpg' },
+  ];
+  assert.deepEqual(yearMarks(ents), [
+    { label: '2019', index: 1 },
+    { label: '2020', index: 3 },
+    { label: '2026', index: 4 },
+  ]);
+  assert.deepEqual(yearMarks([...ents, { name: 'a.jpg' }, { name: 'b.jpg' }]), [], 'fewer than 80% dated');
+  assert.deepEqual(yearMarks(ents.slice(0, 3)), [], 'a single year needs no jumps');
+  assert.deepEqual(yearMarks([]), []);
 });

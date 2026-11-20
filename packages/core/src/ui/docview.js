@@ -26,6 +26,7 @@ export class DocView {
   constructor(app, path) {
     this.app = app;
     this.path = path;
+    this.kind = 'doc';
     this.id = ++viewSeq;
     this.renderSeq = 0;
     this.meta = null; // { size, mtimeMs, encoding, lines, isChat, headings, days, timing }

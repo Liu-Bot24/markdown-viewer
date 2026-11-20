@@ -5,7 +5,7 @@ import { Outline } from './outline.js';
 import { FindBar } from './find.js';
 import { PeekPanel } from './peek.js';
 import { Lightbox } from './lightbox.js';
-import { mediaKind, isMarkdownPath, dirname, basename, isVirtualPath, resourceUrlToPath } from '../shared/paths.js';
+import { mediaKind, isMarkdownPath, fileViewKind, dirname, basename, isVirtualPath, resourceUrlToPath } from '../shared/paths.js';
 import { isMessageAnchor } from '../shared/chat.js';
 
 class App {
@@ -46,7 +46,7 @@ class App {
     if (this.opts.afterInit) await this.opts.afterInit(this);
     window.mdv.ready();
     if (!st.hasInitialTargets && st.session && st.session.length) {
-      for (const t of st.session) await this.tabs.open({ path: t.path, anchor: '' }, { background: true });
+      for (const t of st.session) await this.tabs.open({ path: t.path, anchor: '', view: t.view }, { background: true });
       const first = this.tabs.tabs[0];
       if (first) this.tabs.activate(first);
     }
@@ -210,7 +210,7 @@ class App {
 
   /** Mode switch, save button, title and status for the active document. */
   renderChrome(view) {
-    const editable = !!(view && view.meta && !view.error);
+    const editable = !!(view && view.kind === 'doc' && view.meta && !view.error);
     $('#mode-seg').style.display = editable || (view && view.editing) ? '' : 'none';
     for (const b of $$('#mode-seg button')) b.classList.toggle('on', !!view && view.mode === b.dataset.mode);
     $('#btn-save').style.display = view && view.dirty ? '' : 'none';
@@ -319,17 +319,43 @@ class App {
     return this.openNewTab({ path, anchor: '' });
   }
 
+  /** The folder page for dir: in this tab, or a new one. */
+  openFolder(dir, { newTab = false } = {}) {
+    // one spelling per folder: no trailing separator (a link written as "图片/" has one), except a root
+    const path = String(dir).replace(isVirtualPath(dir) ? /\/+$/ : /\\+$/, '') || '/';
+    const target = { path: /^[a-zA-Z]:$/.test(path) ? path + '\\' : path, anchor: '', view: 'folder' };
+    if (newTab) return this.openNewTab(target);
+    return this.navigate(target);
+  }
+
+  /**
+   * Open a listing entry or a link target that is not a folder: Markdown as a document,
+   * pictures, video and audio in the viewer, text files and web pages read-only in the
+   * app, anything else with the platform (the default program; on the web a download).
+   */
+  openEntry(e, { newTab = false } = {}) {
+    if (e.isDir) return this.openFolder(e.path, { newTab });
+    if (isMarkdownPath(e.path)) return newTab ? this.openNewTab({ path: e.path, anchor: '' }) : this.navigate({ path: e.path, anchor: '' });
+    const media = mediaKind(e.path);
+    if (media) return this.lightbox.open({ kind: media, path: e.path });
+    if (fileViewKind(e.path)) {
+      const target = { path: e.path, anchor: '', view: 'file' };
+      return newTab ? this.openNewTab(target) : this.navigate(target);
+    }
+    return window.mdv.openPath(e.path);
+  }
+
   async openTargets(msg) {
     if (msg.folder) {
       await this.tree.setRoot(msg.folder);
       if (!this.settings.sidebar) this.setSetting({ sidebar: true });
     }
     for (const t of msg.targets) {
-      const existing = msg.newTab ? null : this.tabs.findByPath(t.path);
+      const existing = msg.newTab ? null : this.tabs.findByPath(t.path, t.view);
       if (existing) {
         this.tabs.activate(existing);
         if (t.anchor) await this.tabs.go(existing, { path: existing.view.path, anchor: t.anchor });
-      } else await this.tabs.open({ path: t.path, anchor: t.anchor || '' });
+      } else await this.tabs.open({ path: t.path, anchor: t.anchor || '', view: t.view });
     }
   }
 
@@ -344,7 +370,7 @@ class App {
 
   saveSession = debounce(() => {
     if (this.isSelftest) return;
-    const session = this.tabs.tabs.filter((t) => t.view).map((t) => ({ path: t.view.path }));
+    const session = this.tabs.tabs.filter((t) => t.view).map((t) => (t.view.kind === 'doc' ? { path: t.view.path } : { path: t.view.path, view: t.view.kind }));
     window.mdv.patchState({ session });
   }, 500);
 
@@ -366,7 +392,8 @@ class App {
       this.find.setView(view);
     }
     if (view) {
-      if (!this.tree.root || !isUnder(view.path, this.tree.root)) this.tree.setRoot(dirname(view.path));
+      if (view.kind === 'folder' && sameFile(view.path, this.tree.root)) this.tree.reveal(view.path);
+      else if (!this.tree.root || !isUnder(view.path, this.tree.root)) this.tree.setRoot(view.kind === 'folder' ? view.path : dirname(view.path));
       else this.tree.reveal(view.path);
       if (document.activeElement === document.body) (view.mode !== 'view' && view.editor ? view.editor : view.el).focus({ preventScroll: true });
     }
@@ -415,6 +442,10 @@ class App {
       return;
     }
     left.textContent = view.path;
+    if (view.statusBits) {
+      right.textContent = view.statusBits().join(' · ');
+      return;
+    }
     const m = view.meta;
     if (!m) {
       right.textContent = view.error ? '无法打开' : '载入中…';
@@ -581,9 +612,8 @@ class App {
     if (r.kind !== 'local') return;
     if (!r.exists) return toast('文件不存在：' + r.path, 'warn', 5000);
     if (r.isDir) {
-      await this.tree.setRoot(r.path);
-      if (!this.settings.sidebar) this.setSetting({ sidebar: true });
-      return;
+      if (inPeek) this.peek.close();
+      return this.openFolder(r.path, { newTab: newTab || e.ctrlKey });
     }
     if (isMarkdownPath(r.path)) {
       const target = { path: r.path, anchor: r.anchor };
@@ -596,9 +626,8 @@ class App {
       if (inPeek) this.peek.close();
       return this.navigate(target);
     }
-    const media = mediaKind(r.path);
-    if (media) return this.lightbox.open({ kind: media, path: r.path });
-    return window.mdv.openPath(r.path);
+    if (inPeek && fileViewKind(r.path)) this.peek.close();
+    return this.openEntry({ path: r.path, isDir: false }, { newTab: newTab || e.ctrlKey });
   }
 
   // ---------- context menus ----------
@@ -708,19 +737,23 @@ class App {
 
   async treeContextMenu(node) {
     const fm = this.caps.fileManager;
-    const link = this.caps.copyLink && window.mdv.linkFor ? window.mdv.linkFor(node.path) : null;
+    const linkView = node.isDir ? 'folder' : node.isMd ? undefined : fileViewKind(node.path) ? 'file' : null;
+    const link = this.caps.copyLink && window.mdv.linkFor && linkView !== null ? window.mdv.linkFor(node.path, '', linkView) : null;
     const items = node.isDir
       ? [
+          { id: 'folder', label: '在正文中打开' },
+          { id: 'folder-tab', label: this.caps.appTabs ? '在新标签页打开' : '在新窗口打开' },
           { id: 'root', label: '设为目录树根' },
           ...(fm ? [{ id: 'reveal', label: '在资源管理器中打开' }] : []),
           { id: 'copy', label: '复制路径' },
+          ...(link ? [{ id: 'link', label: '复制链接' }] : []),
         ]
       : [
           { id: 'open', label: '打开' },
-          { id: 'tab', label: this.caps.appTabs ? '在新标签页打开' : '在新窗口打开', enabled: node.isMd },
+          { id: 'tab', label: this.caps.appTabs ? '在新标签页打开' : '在新窗口打开', enabled: node.isMd || !!fileViewKind(node.path) },
           { type: 'separator' },
           { id: 'copy', label: '复制路径' },
-          ...(link && node.isMd ? [{ id: 'link', label: '复制链接' }] : []),
+          ...(link ? [{ id: 'link', label: '复制链接' }] : []),
           ...(fm
             ? [
                 { id: 'reveal', label: '在资源管理器中显示' },
@@ -734,8 +767,9 @@ class App {
     if (id === 'link') window.mdv.copyText(link).then(() => toast('已复制链接'));
     if (id === 'download') window.mdv.downloadPath(node.path);
     if (id === 'root') this.tree.setRoot(node.path);
-    if (id === 'open') node.isMd ? this.openPath(node.path) : window.mdv.openPath(node.path);
-    if (id === 'tab') this.openPath(node.path, { newTab: true });
+    if (id === 'folder' || id === 'folder-tab') this.openFolder(node.path, { newTab: id === 'folder-tab' });
+    if (id === 'open') this.openEntry(node);
+    if (id === 'tab') this.openEntry(node, { newTab: true });
     if (id === 'copy') window.mdv.copyText(node.path);
     if (id === 'reveal') node.isDir ? window.mdv.openPath(node.path) : window.mdv.reveal(node.path);
     if (id === 'default') window.mdv.openPath(node.path);
@@ -800,7 +834,7 @@ class App {
         this.goForward();
         break;
       case 'copy-link':
-        if (v && window.mdv.linkFor) window.mdv.copyText(window.mdv.linkFor(v.path)).then(() => toast('已复制链接'));
+        if (v && window.mdv.linkFor) window.mdv.copyText(window.mdv.linkFor(v.path, '', v.kind === 'doc' ? undefined : v.kind)).then(() => toast('已复制链接'));
         break;
       case 'download':
         if (v && window.mdv.downloadPath) window.mdv.downloadPath(v.path);
