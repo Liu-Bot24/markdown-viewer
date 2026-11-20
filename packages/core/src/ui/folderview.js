@@ -10,6 +10,7 @@
 // off (a sandboxed frame), both read-only.
 import { h, fmtSize, rafThrottle, toast, caps } from './util.js';
 import { decodeText } from './render-client.js';
+import { chatHomeOf } from './source.js';
 import { basename, dirname, extname, mediaKind, isMarkdownPath, fileViewKind, toLocalResourceUrl, isVirtualPath, AUDIO_EXTS } from '../shared/paths.js';
 
 let viewSeq = 100000; // apart from DocView ids
@@ -173,6 +174,12 @@ export class FolderView extends PaneView {
       return false;
     }
     this.error = null;
+    // attachments of a chat: their messages can be found (menu, viewer)
+    this.home = null;
+    this.homeP = chatHomeOf(this.path).then(
+      (x) => (this.home = x),
+      () => null,
+    );
     let ents = r.entries || [];
     if (!r.paged) {
       // a platform without paging returns everything, unsorted
@@ -354,7 +361,7 @@ export class FolderView extends PaneView {
         thumb.addEventListener('error', () => thumb.replaceWith(h('span.fv-icon', null, ICONS.video)), { once: true });
       } else thumb = h('span.fv-icon', null, ICONS[kind]);
       const box = h('div.fv-thumb', null, thumb, kind === 'video' ? h('span.fv-play', null, '▶') : null);
-      return this.place(h('div.fv-cell.fv-tile', { title: tip, 'data-kind': kind }, box, h('div.fv-name', null, e.name)), i);
+      return this.place(h('div.fv-cell.fv-tile', { title: tip, 'data-kind': kind, 'data-path': e.path }, box, h('div.fv-name', null, e.name)), i);
     }
     const idx = this.items[i];
     const transcript = this.pair.get(idx);
@@ -410,10 +417,18 @@ export class FolderView extends PaneView {
     this.app.openFolder(p, { newTab });
   }
 
-  menuFor(ev, e) {
+  async menuFor(ev, e) {
     ev.preventDefault();
     ev.stopPropagation();
-    this.app.treeContextMenu({ path: e.path, isDir: e.isDir, isMd: entryKind(e) === 'md' });
+    if (!e.isDir && this.homeP) await this.homeP;
+    const locate = !e.isDir && this.home ? this.locator() : null;
+    this.app.treeContextMenu({ path: e.path, isDir: e.isDir, isMd: entryKind(e) === 'md', locate });
+  }
+
+  /** Opens the message that sent a file of this folder; false when there is none. */
+  locator() {
+    const home = this.home;
+    return (p) => this.app.locateMessage(p, home);
   }
 
   onContextMenu(ev) {
@@ -428,6 +443,7 @@ export class FolderView extends PaneView {
       count: this.total - (this.chips ? this.dirCount : 0),
       index: idx - (this.chips ? this.dirCount : 0),
       step: (dir) => this.nextMedia(seq, dir),
+      locate: this.home ? this.locator() : null,
     };
     this.app.lightbox.open({ kind: mediaKind(e.name), path: e.path, seq });
   }

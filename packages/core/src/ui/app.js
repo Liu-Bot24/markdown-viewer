@@ -7,6 +7,7 @@ import { PeekPanel } from './peek.js';
 import { Lightbox } from './lightbox.js';
 import { mediaKind, isMarkdownPath, fileViewKind, dirname, basename, isVirtualPath, resourceUrlToPath } from '../shared/paths.js';
 import { isMessageAnchor } from '../shared/chat.js';
+import { findMessages } from './source.js';
 
 class App {
   constructor(opts = {}) {
@@ -126,6 +127,19 @@ class App {
       return Promise.resolve(this.testAnswers.length ? this.testAnswers.shift() : opts.cancelId ?? opts.buttons.length - 1);
     }
     return window.mdv.ask(opts);
+  }
+
+  /** Show a context menu; returns the chosen item's id, or null. */
+  menu(items) {
+    if (this.testMenus) {
+      // selftest: pick the item with the scripted label instead of a native menu
+      this.menusShown.push(items.filter((it) => it.label).map((it) => it.label));
+      const label = this.testMenus.shift();
+      const it = items.find((x) => x.label === label && x.enabled !== false);
+      if (!this.testMenus.length) this.testMenus = null;
+      return Promise.resolve(it ? it.id : null);
+    }
+    return window.mdv.contextMenu(items);
   }
 
   /** Unsaved edits in `view`: save, discard or cancel. Resolves true when it is fine to move on. */
@@ -735,6 +749,31 @@ class App {
     if (id === 'reveal' && tab.view) window.mdv.reveal(tab.view.path);
   }
 
+  /**
+   * Open the chat message that sent the file at path (home: its folder's chatHomeOf).
+   * Several messages: the user picks one. Resolves false when nothing was opened.
+   */
+  async locateMessage(path, home) {
+    let hits;
+    try {
+      hits = await findMessages(home, basename(path));
+    } catch {
+      hits = [];
+    }
+    if (!hits.length) {
+      toast('没有找到发送这个文件的消息', 'warn', 4000);
+      return false;
+    }
+    let hit = hits[0];
+    if (hits.length > 1) {
+      const id = await this.menu(hits.slice(0, 30).map((x, i) => ({ id: 'm' + i, label: [x.date, x.sender].filter(Boolean).join(' · ') || x.anchor })));
+      if (!id) return false;
+      hit = hits[Number(id.slice(1))];
+    }
+    await this.navigate({ path: hit.volume, anchor: hit.anchor });
+    return true;
+  }
+
   async treeContextMenu(node) {
     const fm = this.caps.fileManager;
     const linkView = node.isDir ? 'folder' : node.isMd ? undefined : fileViewKind(node.path) ? 'file' : null;
@@ -751,6 +790,7 @@ class App {
       : [
           { id: 'open', label: '打开' },
           { id: 'tab', label: this.caps.appTabs ? '在新标签页打开' : '在新窗口打开', enabled: node.isMd || !!fileViewKind(node.path) },
+          ...(node.locate ? [{ id: 'locate', label: '找到原消息' }] : []),
           { type: 'separator' },
           { id: 'copy', label: '复制路径' },
           ...(link ? [{ id: 'link', label: '复制链接' }] : []),
@@ -763,8 +803,9 @@ class App {
             : []),
           ...(this.caps.download ? [{ id: 'download', label: '下载' }] : []),
         ];
-    const id = await window.mdv.contextMenu(items);
+    const id = await this.menu(items);
     if (id === 'link') window.mdv.copyText(link).then(() => toast('已复制链接'));
+    if (id === 'locate') node.locate(node.path);
     if (id === 'download') window.mdv.downloadPath(node.path);
     if (id === 'root') this.tree.setRoot(node.path);
     if (id === 'folder' || id === 'folder-tab') this.openFolder(node.path, { newTab: id === 'folder-tab' });

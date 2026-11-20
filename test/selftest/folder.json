@@ -328,6 +328,244 @@
     "title": "page.html - MD Viewer"
    },
    "screenshot": true
+  },
+  {
+   "name": "write 聊天记录\\2019-02_001.md",
+   "do": "writeFile",
+   "path": "${tmp}\\fv\\聊天记录\\2019-02_001.md",
+   "content": "# 测试会话 · 2019-02 · 001\n\n会话：c_test\n我：u_me\n\n<a id=\"msg-a1a1a1a1a1a1a1a1a1a1a1a1\"></a>\n### 2019-02-12 14:22:01 · 张三 · 图片\n\n发送者：u_张三 · 消息：t:1\n\n> 看这个\n\n- [image · m_1](../%E5%9B%BE%E7%89%87/2019-02-12_142201_%E5%9B%BE%E7%89%87_000004.png)\n"
+  },
+  {
+   "name": "write 聊天记录\\2021-03_001.md",
+   "do": "writeFile",
+   "path": "${tmp}\\fv\\聊天记录\\2021-03_001.md",
+   "content": "# 测试会话 · 2021-03 · 001\n\n会话：c_test\n我：u_me\n\n<a id=\"msg-b2b2b2b2b2b2b2b2b2b2b2b2\"></a>\n### 2021-03-07 12:27:49 · 李四 · 图片\n\n发送者：u_李四 · 消息：t:1\n\n> 看这个\n\n- [image · m_1](../%E5%9B%BE%E7%89%87/2021-03-07_122749_%E5%9B%BE%E7%89%87_010314.png)\n\n<a id=\"msg-c3c3c3c3c3c3c3c3c3c3c3c3\"></a>\n### 2021-03-08 09:00:00 · 王五 · 文本\n\n发送者：u_王五 · 消息：t:1\n\n> 看这个\n\n- [image · m_1](../%E5%9B%BE%E7%89%87/2021-03-07_122749_%E5%9B%BE%E7%89%87_010314.png)\n"
+  },
+  {
+   "name": "open-index-again",
+   "do": "open",
+   "path": "${tmp}\\fv\\索引.md",
+   "expect": {
+    "view.error": null
+   }
+  },
+  {
+   "name": "click-pictures-again",
+   "do": "mouse",
+   "selector": ".doc-root.active article a:nth-of-type(1)",
+   "settle": 300
+  },
+  {
+   "name": "pictures-again",
+   "do": "fvWait",
+   "kind": "folder",
+   "settle": 1200,
+   "expect": {
+    "total": 7
+   }
+  },
+  {
+   "name": "open-first-picture",
+   "do": "mouse",
+   "selector": ".doc-root.active .fv-tile",
+   "settle": 800
+  },
+  {
+   "name": "viewer-offers-locate",
+   "do": "fvState",
+   "expect": {
+    "lb.count": "1 / 6",
+    "lb.locate": true
+   },
+   "screenshot": true
+  },
+  {
+   "name": "click-locate",
+   "do": "mouse",
+   "selector": ".lb-locate",
+   "settle": 300
+  },
+  {
+   "name": "message-shown",
+   "do": "waitTarget",
+   "path": "${tmp}\\fv\\聊天记录\\2019-02_001.md",
+   "anchor": "msg-a1a1a1a1a1a1a1a1a1a1a1a1",
+   "expect": {
+    "found": true,
+    "anchorVisible": true
+   }
+  },
+  {
+   "name": "viewer-closed-after-locate",
+   "do": "fvState",
+   "expect": {
+    "lb.open": false,
+    "kind": "doc",
+    "target": "msg-a1a1a1a1a1a1a1a1a1a1a1a1"
+   },
+   "screenshot": true
+  },
+  {
+   "name": "back-to-pictures",
+   "do": "back"
+  },
+  {
+   "name": "pictures-after-back",
+   "do": "fvWait",
+   "kind": "folder",
+   "expect": {
+    "total": 7
+   }
+  },
+  {
+   "name": "script-menus",
+   "do": "menuPick",
+   "labels": [
+    "找到原消息",
+    "2021-03-08 09:00:00 · 王五"
+   ]
+  },
+  {
+   "name": "right-click-sixth",
+   "do": "mouse",
+   "selector": ".doc-root.active .fv-tile[data-path$=\"2021-03-07_122749_图片_010314.png\"]",
+   "button": "right",
+   "settle": 300
+  },
+  {
+   "name": "second-message-shown",
+   "do": "waitTarget",
+   "path": "${tmp}\\fv\\聊天记录\\2021-03_001.md",
+   "anchor": "msg-c3c3c3c3c3c3c3c3c3c3c3c3",
+   "expect": {
+    "found": true,
+    "anchorVisible": true
+   }
+  },
+  {
+   "name": "menus-offered",
+   "do": "menusShown",
+   "expect": {
+    "shown.0": {
+     "includes": "找到原消息"
+    },
+    "shown.1": "2021-03-07 12:27:49 · 李四|2021-03-08 09:00:00 · 王五",
+    "pending": 0
+   }
+  },
+  {
+   "name": "back-to-pictures-2",
+   "do": "back"
+  },
+  {
+   "name": "pictures-after-back-2",
+   "do": "fvWait",
+   "kind": "folder",
+   "expect": {
+    "total": 7
+   }
+  },
+  {
+   "name": "script-menu-unlinked",
+   "do": "menuPick",
+   "labels": [
+    "找到原消息"
+   ]
+  },
+  {
+   "name": "right-click-fifth",
+   "do": "mouse",
+   "selector": ".doc-root.active .fv-tile[data-path$=\"2021-03-07_122724_图片_010313.png\"]",
+   "button": "right",
+   "settle": 600
+  },
+  {
+   "name": "not-found-said",
+   "do": "fvState",
+   "expect": {
+    "kind": "folder",
+    "toast": "没有找到发送这个文件的消息"
+   }
+  },
+  {
+   "name": "write ${tmp}\\fv-plain\\看图.md",
+   "do": "writeFile",
+   "path": "${tmp}\\fv-plain\\看图.md",
+   "content": "# 图\n\n[图片](图片/)\n"
+  },
+  {
+   "name": "write ${tmp}\\fv-plain\\图片\\2020-01-01_000000_a.png",
+   "do": "writeFile",
+   "path": "${tmp}\\fv-plain\\图片\\2020-01-01_000000_a.png",
+   "base64": "iVBORw0KGgoAAAANSUhEUgAAAUAAAADwCAIAAAD+Tyo8AAAC00lEQVR4nO3TsQkAIBDAwK+d2HEc1R1sJHBwA6TJrH2AqPleADwzMIQZGMIMDGEGhjADQ5iBIczAEGZgCDMwhBkYwgwMYQaGMANDmIEhzMAQZmAIMzCEGRjCDAxhBoYwA0OYgSHMwBBmYAgzMIQZGMIMDGEGhjADQ5iBIczAEGZgCDMwhBkYwgwMYQaGMANDmIEhzMAQZmAIMzCEGRjCDAxhBoYwA0OYgSHMwBBmYAgzMIQZGMIMDGEGhjADQ5iBIczAEGZgCDMwhBkYwgwMYQaGMANDmIEhzMAQZmAIMzCEGRjCDAxhBoYwA0OYgSHMwBBmYAgzMIQZGMIMDGEGhjADQ5iBIczAEGZgCDMwhBkYwgwMYQaGMANDmIEhzMAQZmAIMzCEGRjCDAxhBoYwA0OYgSHMwBBmYAgzMIQZGMIMDGEGhjADQ5iBIczAEGZgCDMwhBkYwgwMYQaGMANDmIEhzMAQZmAIMzCEGRjCDAxhBoYwA0OYgSHMwBBmYAgzMIQZGMIMDGEGhjADQ5iBIczAEGZgCDMwhBkYwgwMYQaGMANDmIEhzMAQZmAIMzCEGRjCDAxhBoYwA0OYgSHMwBBmYAgzMIQZGMIMDGEGhjADQ5iBIczAEGZgCDMwhBkYwgwMYQaGMANDmIEhzMAQZmAIMzCEGRjCDAxhBoYwA0OYgSHMwBBmYAgzMIQZGMIMDGEGhjADQ5iBIczAEGZgCDMwhBkYwgwMYQaGMANDmIEhzMAQZmAIMzCEGRjCDAxhBoYwA0OYgSHMwBBmYAgzMIQZGMIMDGEGhjADQ5iBIczAEGZgCDMwhBkYwgwMYQaGMANDmIEhzMAQZmAIMzCEGRjCDAxhBoYwA0OYgSHMwBBmYAgzMIQZGMIMDGEGhjADQ5iBIczAEGZgCDMwhBkYwgwMYQaGMANDmIEhzMAQZmAIMzCEGRjCDAxhBoYwA0OYgSHsAg9j697h7RWlAAAAAElFTkSuQmCC"
+  },
+  {
+   "name": "open-plain",
+   "do": "open",
+   "path": "${tmp}\\fv-plain\\看图.md",
+   "expect": {
+    "view.error": null
+   }
+  },
+  {
+   "name": "click-plain-pictures",
+   "do": "mouse",
+   "selector": ".doc-root.active article a:nth-of-type(1)",
+   "settle": 300
+  },
+  {
+   "name": "plain-folder",
+   "do": "fvWait",
+   "kind": "folder",
+   "settle": 800,
+   "expect": {
+    "total": 1
+   }
+  },
+  {
+   "name": "script-menu-plain",
+   "do": "menuPick",
+   "labels": [
+    "nothing"
+   ]
+  },
+  {
+   "name": "right-click-plain",
+   "do": "mouse",
+   "selector": ".doc-root.active .fv-tile",
+   "button": "right",
+   "settle": 300
+  },
+  {
+   "name": "plain-menu-without-locate",
+   "do": "menusShown",
+   "expect": {
+    "shown.0": {
+     "includes": "复制路径",
+     "excludes": "找到原消息"
+    }
+   }
+  },
+  {
+   "name": "open-plain-picture",
+   "do": "mouse",
+   "selector": ".doc-root.active .fv-tile",
+   "settle": 800
+  },
+  {
+   "name": "plain-viewer-without-locate",
+   "do": "fvState",
+   "expect": {
+    "lb.open": true,
+    "lb.locate": false
+   }
+  },
+  {
+   "name": "esc-plain",
+   "do": "keys",
+   "keys": [
+    "Escape"
+   ]
   }
  ]
 }

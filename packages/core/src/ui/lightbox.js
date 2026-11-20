@@ -13,11 +13,13 @@ export class Lightbox {
     this.stage = h('div.lb-stage');
     this.caption = h('div.lb-caption');
     this.counter = h('span.lb-count');
+    this.locateBtn = h('button.btn.small.lb-locate', { hidden: true, onclick: () => this.locate() }, '找到原消息');
     this.bar = h(
       'div.lb-bar',
       null,
       this.caption,
       this.counter,
+      this.locateBtn,
       ...(caps().fileManager
         ? [
             h('button.btn.small', { onclick: () => this.path && window.mdv.openPath(this.path) }, '用默认程序打开'),
@@ -31,7 +33,9 @@ export class Lightbox {
     this.path = null;
     this.img = null;
     this.press = null; // the current pointer press: where it started and whether it became a drag
-    this.seq = null; // { index, count, step(dir) -> Promise<{ kind, path } | null> } when stepping through a folder
+    // when stepping through a folder: { index, count, step(dir) -> Promise<{ kind, path } | null>,
+    // locate?(path) -> Promise<boolean>, set when the folder holds a chat's attachments }
+    this.seq = null;
     this.prevBtn = h('button.lb-side.prev', { title: '上一个（←）', onclick: () => this.step(-1) }, '‹');
     this.nextBtn = h('button.lb-side.next', { title: '下一个（→）', onclick: () => this.step(1) }, '›');
     this.el = h('div.lightbox', null, this.bar, this.stage, this.prevBtn, this.nextBtn);
@@ -70,6 +74,7 @@ export class Lightbox {
     this.counter.textContent = s ? `${(s.index + 1).toLocaleString()} / ${s.count.toLocaleString()}` : '';
     this.prevBtn.disabled = !s || s.index <= 0;
     this.nextBtn.disabled = !s || s.index >= s.count - 1;
+    this.locateBtn.hidden = !(s && s.locate && path);
     this.caption.textContent = path ? basename(path) : src;
     this.caption.title = path || src;
     // the web shows reduced previews in documents: the viewer loads the original
@@ -97,6 +102,20 @@ export class Lightbox {
       else if (!next) (dir < 0 ? this.prevBtn : this.nextBtn).disabled = true;
     } finally {
       this.stepping = false;
+    }
+  }
+
+  /** The message that sent the file shown; the viewer closes once it is opened. */
+  async locate() {
+    const s = this.seq;
+    if (!s || !s.locate || !this.path || this.locating) return;
+    this.locating = true;
+    this.locateBtn.disabled = true;
+    try {
+      if ((await s.locate(this.path)) && this.seq === s) this.close();
+    } finally {
+      this.locating = false;
+      this.locateBtn.disabled = false;
     }
   }
 

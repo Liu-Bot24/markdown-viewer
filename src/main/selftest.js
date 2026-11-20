@@ -1,7 +1,7 @@
 // End-to-end self test: runs the steps of a JSON spec inside the real window,
 // checks expectations, saves screenshots and writes report.json, then exits.
 //
-// spec: { outDir?, steps: [{ name, do, ...params, expect?: {path: value|{min,max,eq}}, screenshot?: true }] }
+// spec: { outDir?, steps: [{ name, do, ...params, expect?: {path: value|{min,max,eq,includes,excludes}}, screenshot?: true }] }
 // Paths in params may use ${fixtures} (test/fixtures) and ${env:NAME}.
 
 import { app, nativeTheme } from 'electron';
@@ -21,6 +21,7 @@ function check(result, expect) {
       if ('max' in want && !(got <= want.max)) failures.push(`${k}=${JSON.stringify(got)} > ${want.max}`);
       if ('eq' in want && got !== want.eq) failures.push(`${k}=${JSON.stringify(got)} != ${JSON.stringify(want.eq)}`);
       if ('includes' in want && !(typeof got === 'string' && got.includes(want.includes))) failures.push(`${k}=${JSON.stringify(got)} lacks ${want.includes}`);
+      if ('excludes' in want && !(typeof got === 'string' && !got.includes(want.excludes))) failures.push(`${k}=${JSON.stringify(got)} has ${want.excludes}`);
     } else if (got !== want) failures.push(`${k}=${JSON.stringify(got)} != ${JSON.stringify(want)}`);
   }
   return failures;
@@ -97,7 +98,7 @@ export async function runSelftest(win, specPath, appRoot) {
       } else if (params.do === 'mouse') {
         // real mouse input at a point of the first element matching `selector`: `frac` is
         // [x, y] as fractions of its box, `offset` [x, y] in px from its top-left (wins
-        // over frac); `drag` [dx, dy] moves before releasing. `probe` then asks the page
+        // over frac); `drag` [dx, dy] moves before releasing; `button` 'right' for a right click. `probe` then asks the page
         // for the lightbox state at the release point.
         win.focus();
         win.webContents.focus();
@@ -110,7 +111,8 @@ export async function runSelftest(win, specPath, appRoot) {
         const [dx, dy] = params.drag || [0, 0];
         const probe = (x, y) => win.webContents.executeJavaScript(`window.__mdvTest.step(${JSON.stringify({ do: 'lbState', x, y })})`, true);
         const before = params.probe ? await probe(x0, y0) : null;
-        const send = (type, x, y, extra = {}) => win.webContents.sendInputEvent({ type, x, y, button: 'left', clickCount: 1, ...extra });
+        const button = params.button || 'left'; // 'right' opens the page's context menu
+        const send = (type, x, y, extra = {}) => win.webContents.sendInputEvent({ type, x, y, button, clickCount: 1, ...extra });
         send('mouseMove', x0, y0, { button: undefined });
         send('mouseDown', x0, y0);
         const n = dx || dy ? 8 : 0;

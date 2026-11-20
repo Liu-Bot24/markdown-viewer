@@ -346,6 +346,18 @@ export function install(app) {
       return { asked: app.asked || [], pending: (app.testAnswers || []).length };
     },
 
+    /** Scripted picks (item labels) for the next context menus, in order. */
+    menuPick({ labels = [] }) {
+      app.testMenus = labels.length ? [...labels] : null;
+      app.menusShown = [];
+      return {};
+    },
+
+    /** Labels of the context menus shown since menuPick. */
+    menusShown() {
+      return { shown: (app.menusShown || []).map((m) => m.join('|')), pending: (app.testMenus || []).length };
+    },
+
     async closeTab() {
       const closed = await app.tabs.close(app.activeTab);
       await nextFrame();
@@ -417,7 +429,15 @@ export function install(app) {
     fvState() {
       const v = app.activeView;
       const lb = app.lightbox;
-      const out = { kind: v && v.kind, path: v && v.path, title: document.title, status: document.getElementById('status-right').textContent, lb: { open: lb.isOpen, count: lb.counter.textContent, caption: lb.caption.textContent } };
+      const out = {
+        kind: v && v.kind,
+        path: v && v.path,
+        target: v && v.kind === 'doc' ? v.target || '' : null,
+        title: document.title,
+        status: document.getElementById('status-right').textContent,
+        toast: (() => { const t = document.getElementById('toast'); return t && t.classList.contains('show') ? t.textContent : ''; })(),
+        lb: { open: lb.isOpen, count: lb.counter.textContent, caption: lb.caption.textContent, locate: !!lb.locateBtn && !lb.locateBtn.hidden && lb.locateBtn.offsetParent !== null },
+      };
       if (v && v.kind === 'folder') {
         const imgs = [...v.body.querySelectorAll('img')];
         Object.assign(out, {
