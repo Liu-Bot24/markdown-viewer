@@ -139,7 +139,14 @@ Windows 上的 Markdown 阅读器和编辑器，可以作为 .md 文件的默认
 
 ## 安装与运行
 
-需要 Node.js 22 或更高版本。
+在 [Releases](https://github.com/Liu-Bot24/markdown-viewer/releases) 下载（64 位 Windows 10/11）：
+
+- **安装版** `MDViewer-<版本>-Setup.exe`：只为当前用户安装，不需要管理员权限，可以选择创建桌面快捷方式、加入 .md 的「打开方式」、加入 PATH；已安装旧版时直接运行它升级。
+- **绿色版** `MDViewer-<版本>-Portable.zip`：解压到任意文件夹，运行 `MD Viewer\mdview.exe`。
+
+两种方式的设置都保存在 `%APPDATA%\MD Viewer`，卸载或删除程序文件夹不会删除设置。
+
+从源码构建需要 Node.js 22 或更高版本。
 
 ```powershell
 npm install
@@ -305,6 +312,7 @@ def open_in_viewer(path, anchor=None):
 | `npm run selftest:folder` | 文件夹页的端到端测试（`scripts/make-folder-spec.mjs` 生成 `test/selftest/folder.json`），在 2400 px 宽的窗口里用真实鼠标和按键：缩略图网格、年份跳转、图片查看中逐张切换、语音播放和转写、文本文件和网页文件的只读显示、网页里的脚本不会运行，以及从图片找到原消息（查看器按钮、右键菜单、多条消息时选择、找不到时的提示、不属于会话的文件夹不提供），以及在目录树里点击文件夹（展开并在正文打开、再点收起、箭头只展开），以及窗口变窄时列表行仍显示文件名 |
 | `npm run test:e2e` | 在真实窗口中运行端到端测试：`test/selftest/spec.json` 用合成样本；`test/selftest/edit.json` 测编辑；`scripts/make-real-spec.mjs` 根据 `MDV_ARCHIVE`、`MDV_REPORTS` 中的真实文件生成 `test/output/real.json`（其中会出现真实的名称，所以不纳入版本库；没有设置时为空）；最后再测试命令行和单实例交接。截图和 `report.json` 输出到 `test/output/` |
 | `npm run package` | 构建 Windows 可执行文件（`-- --out <目录>` 输出到别处） |
+| `pwsh -File scripts\release.ps1` | 生成发布文件：`release\` 下的安装版（需要 Inno Setup 6，脚本是 `install\mdview.iss`）和绿色版 zip，版本号取自 `package.json` |
 | `npm run test:web` | 网页版：构建前端，再测试服务器（根目录、路径安全、登录、Range、覆盖原文件、缩略图和缓存上限、文件夹并排时的相对引用）和搜索（索引结果与逐文件扫描一致、增量检查、定时检查、后台扫描） |
 | `npm run smoke:container --workspace @mdv/web -- <镜像>` | 网页版镜像的冒烟测试（需要 Docker，默认镜像 `mdview-web:test`）：把合成样本以只读方式挂进容器，`MDV_AUTH` 为 `off` 和 `on` 各启动一次，检查目录、大目录分页、上一个 / 下一个文件、隐藏媒体文件夹、Range、附件强制下载、搜索和定时检查、缩略图、视频转码和缓存、登录 |
 | `node scripts/privacy-scan.mjs` | 公开前的隐私扫描：本机路径、内网地址、邮箱、手机号、微信 ID、令牌和密码哈希，以及本地词表 `.privacy-denylist`（不纳入版本库）里的词。`--history` 连同所有分支、标签和 reflog 能到达的每个提交（提交说明、文件路径和每个文件版本），`--image <镜像>` 连同 Docker 镜像（文件、标签、环境变量、构建历史） |
