@@ -1,19 +1,20 @@
-# Example deployment. Copy it to compose.yaml in this folder, replace every <…> with your own values
-# (nothing here is a default), then run from this folder: docker compose up -d --build
+# Example deployment. Save it as compose.yaml, replace every <…> with your own values
+# (nothing here is a default), then run in that folder: docker compose up -d
 # Each folder mapped to /roots/<name> becomes one root in the tree.
 services:
   mdview:
-    image: mdview-web:1.0.0
-    # Built from this repository; drop these lines when the image is already on the host.
-    build:
-      context: ../..
-      dockerfile: packages/web/Dockerfile
+    image: ghcr.io/liu-bot24/mdview-web:1.0.0
+    # To build from source instead: keep this file as packages/web/compose.yaml in a clone of the
+    # repository, uncomment the three lines below and run: docker compose up -d --build
+    # build:
+    #   context: ../..
+    #   dockerfile: packages/web/Dockerfile
     container_name: mdview-web
     ports:
       - "<host port>:8080"
     environment:
       MDV_AUTH: "off"                 # "on" to require a password (set MDV_PASSWORD_HASH, or use the setup code printed in the log)
-      # MDV_PASSWORD_HASH: "<output of: docker run --rm -i mdview-web:1.0.0 node packages/web/src/server/hash-password.js>"
+      # MDV_PASSWORD_HASH: "<output of: docker run --rm -i ghcr.io/liu-bot24/mdview-web:1.0.0 node packages/web/src/server/hash-password.js>"
       # MDV_PUBLIC_URL: "<https address when reached through a tunnel or reverse proxy>"
       # MDV_TRUSTED_PROXY: "<address of that proxy, to read X-Forwarded-For>"
       # MDV_WRITABLE_ROOTS: "<root names allowed to be overwritten, comma separated; the volume must also be read-write>"

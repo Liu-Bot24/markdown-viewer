@@ -184,26 +184,30 @@ Windows 不允许程序自己把自己设为默认打开方式。使用 `-Associ
 
 ### 部署
 
-网页版从源码构建镜像，用 Docker Compose 部署。在 NAS 或服务器上 `git clone` 本仓库，然后：
+镜像发布在 GitHub Container Registry：`ghcr.io/liu-bot24/mdview-web`，有 x86-64 和 ARM64 两种架构。标签是版本号（`1.0.0`），`latest` 指向最新版本。用 Docker Compose 部署：
 
-1. 把 [`packages/web/compose.example.yaml`](packages/web/compose.example.yaml) 复制为同一文件夹里的 `compose.yaml`，把其中的 `<…>` 换成自己的值：要映射的目录见下面第一张表，环境变量见第二张表。`compose.yaml` 不纳入版本库。
-2. 在 `packages/web` 文件夹里运行：
+1. 把 [`packages/web/compose.example.yaml`](packages/web/compose.example.yaml) 保存为 `compose.yaml`，把其中的 `<…>` 换成自己的值：要映射的目录见下面第一张表，环境变量见第二张表。NAS 的容器界面如果是粘贴一段 Compose 配置，就粘贴改好的内容。
+2. 在 `compose.yaml` 所在的文件夹里运行：
 
    ```bash
-   docker compose up -d --build
+   docker compose up -d
    ```
 
-   这条命令先从源码构建镜像 `mdview-web:1.0.0`，再创建并启动容器。之后更新了源码，再运行同一条命令，就会重新构建并替换容器；设置和索引保存在 `/state` 映射的目录里，不受影响。日志用 `docker compose logs -f` 查看，停止并删除容器用 `docker compose down`。
+   这条命令拉取镜像，再创建并启动容器。升级时把 `image:` 里的版本号改成新版本，再运行同一条命令；设置和索引保存在 `/state` 映射的目录里，不受影响。日志用 `docker compose logs -f` 查看，停止并删除容器用 `docker compose down`。
 
-不用 Compose 时，在仓库根目录构建镜像，再用 `docker run` 或 NAS 的容器管理界面按同样的映射和环境变量创建容器：
+不用 Compose 时，用 `docker run` 或 NAS 的容器管理界面，按同样的镜像、映射和环境变量创建容器。
+
+#### 从源码构建
+
+在 `git clone` 下来的仓库里，把示例保存为 `packages/web/compose.yaml`（不纳入版本库），去掉 `build:` 那三行的注释，在 `packages/web` 里运行 `docker compose up -d --build`：先从源码构建镜像，再启动容器。不用 Compose 时，在仓库根目录构建：
 
 ```bash
 docker build -f packages/web/Dockerfile -t mdview-web:1.0.0 .
 ```
 
-如果 NAS 的界面只能粘贴一段 Compose 配置、不能从源码构建，就先用上面的命令构建镜像，再把配置里 `build:` 那三行删掉。
+基础镜像是官方 Node 镜像（`node:22-bookworm-slim`），默认从 AWS ECR Public 上的 Docker 官方镜像拉取。要改从 Docker Hub 拉取，在 `docker build` 后面加上 `--build-arg NODE_IMAGE=node:22-bookworm-slim`；用 Compose 时，在 `build:` 下面加上 `args: { NODE_IMAGE: node:22-bookworm-slim }`。Intel 核显硬件转码只在 x86-64 镜像里有，ARM64 镜像用软件转码。
 
-基础镜像是官方 Node 镜像（`node:22-bookworm-slim`），默认从 AWS ECR Public 上的 Docker 官方镜像拉取。要改从 Docker Hub 拉取，在 `docker build` 后面加上 `--build-arg NODE_IMAGE=node:22-bookworm-slim`；用 Compose 时，在 `build:` 下面加上 `args: { NODE_IMAGE: node:22-bookworm-slim }`。
+#### 目录与环境变量
 
 需要映射三类目录：
 
@@ -223,7 +227,7 @@ docker build -f packages/web/Dockerfile -t mdview-web:1.0.0 .
 | 环境变量 | 默认值 | 含义 |
 | --- | --- | --- |
 | `MDV_AUTH` | `off` | `on` 时需要密码才能访问。没有设置 `MDV_PASSWORD_HASH` 时，日志里会打印一次性设置码，第一次访问时用它设置密码 |
-| `MDV_PASSWORD_HASH` | 无 | 密码的 scrypt 哈希。镜像构建好之后（用 Compose 时先运行 `docker compose build`），用 `docker run --rm -i mdview-web:1.0.0 node packages/web/src/server/hash-password.js` 生成（从标准输入读入密码） |
+| `MDV_PASSWORD_HASH` | 无 | 密码的 scrypt 哈希。用 `docker run --rm -i ghcr.io/liu-bot24/mdview-web:1.0.0 node packages/web/src/server/hash-password.js` 生成（从标准输入读入密码） |
 | `MDV_PUBLIC_URL` | 无 | 通过反向代理或隧道以 https 访问时填写对外地址，登录 Cookie 会加上 Secure |
 | `MDV_TRUSTED_PROXY` | 无 | 反向代理的地址；只有来自它的请求才读取 `X-Forwarded-For` |
 | `MDV_WRITABLE_ROOTS` | 无 | 允许覆盖原文件的根，逗号分隔；对应目录还必须以读写方式映射 |
@@ -327,7 +331,7 @@ def open_in_viewer(path, anchor=None):
 | `npm run package` | 构建 Windows 可执行文件（`-- --out <目录>` 输出到别处） |
 | `pwsh -File scripts\release.ps1` | 生成发布文件：`release\` 下的安装版（需要 Inno Setup 6，脚本是 `install\mdview.iss`）和绿色版 zip，版本号取自 `package.json` |
 | `npm run test:web` | 网页版：构建前端，再测试服务器（根目录、路径安全、登录、Range、覆盖原文件、缩略图和缓存上限、文件夹并排时的相对引用）和搜索（索引结果与逐文件扫描一致、增量检查、定时检查、后台扫描） |
-| `npm run smoke:container --workspace @mdv/web -- <镜像>` | 网页版镜像的冒烟测试（需要 Docker，默认镜像 `mdview-web:test`）：把合成样本以只读方式挂进容器，`MDV_AUTH` 为 `off` 和 `on` 各启动一次，检查目录、大目录分页、上一个 / 下一个文件、隐藏媒体文件夹、Range、附件强制下载、搜索和定时检查、缩略图、视频转码和缓存、登录 |
+| `npm run smoke:container --workspace @mdv/web -- <镜像>` | 网页版镜像的冒烟测试（需要 Docker，默认镜像 `mdview-web:test`；占用本机 127.0.0.1 的 18090–18092 端口，用环境变量 `MDV_SMOKE_PORT` 改起始端口）：把合成样本以只读方式挂进容器，`MDV_AUTH` 为 `off` 和 `on` 各启动一次，检查目录、大目录分页、上一个 / 下一个文件、隐藏媒体文件夹、Range、附件强制下载、搜索和定时检查、缩略图、视频转码和缓存、登录 |
 | `node scripts/privacy-scan.mjs` | 公开前的隐私扫描：本机路径、内网地址、邮箱、手机号、微信 ID、令牌和密码哈希，以及本地词表 `.privacy-denylist`（不纳入版本库）里的词。`--history` 连同所有分支、标签和 reflog 能到达的每个提交（提交说明、文件路径和每个文件版本），`--image <镜像>` 连同 Docker 镜像（文件、标签、环境变量、构建历史） |
 
 用 `mdview.exe --selftest <spec.json>` 时，同样可以对打包后的程序跑端到端测试。这时需要设置 `MDV_TEST_ROOT=<仓库目录>`。

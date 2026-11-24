@@ -66,14 +66,17 @@ async function waitUp(base) {
   return false;
 }
 
+// host ports: MDV_SMOKE_PORT, MDV_SMOKE_PORT + 1 and + 2 (default 18090) on 127.0.0.1
+const PORT = Number(process.env.MDV_SMOKE_PORT) || 18090;
+
 const CHAT = '/archive/01_个人私聊/测试 联系人🍎/聊天记录/2026-09_001.md';
 const VOICE = '/archive/01_个人私聊/测试 联系人🍎/语音/2026-09-01_102000_语音_000004.mp3';
 const BIG = '/archive/01_个人私聊/大量图片/图片';
 
 async function offMode() {
-  const base = 'http://127.0.0.1:18090';
+  const base = 'http://127.0.0.1:' + PORT;
   // the scheduled check every 1.8 s, so the run can see it fire
-  run('mdv-smoke-off', 18090, { MDV_AUTH: 'off', MDV_INDEX_SCHEDULE: 'every:0.0005h', TZ: 'Asia/Shanghai' });
+  run('mdv-smoke-off', PORT, { MDV_AUTH: 'off', MDV_INDEX_SCHEDULE: 'every:0.0005h', TZ: 'Asia/Shanghai' });
   check('off: container starts', await waitUp(base));
   const uid = docker('exec', 'mdv-smoke-off', 'id', '-u');
   check('off: runs as non-root', uid !== '0', 'uid ' + uid);
@@ -161,9 +164,9 @@ async function offMode() {
 }
 
 async function layoutMode() {
-  const base = 'http://127.0.0.1:18092';
+  const base = 'http://127.0.0.1:' + (PORT + 2);
   // the archive and the report folder as two roots, each under its own name
-  run('mdv-smoke-layout', 18092, { MDV_AUTH: 'off', MDV_NO_INDEX: '1' }, [`${path.join(dep.roots, 'archive')}:/roots/聊天记录归档:ro`, `${reports}:/roots/聊天记录月报:ro`]);
+  run('mdv-smoke-layout', PORT + 2, { MDV_AUTH: 'off', MDV_NO_INDEX: '1' }, [`${path.join(dep.roots, 'archive')}:/roots/聊天记录归档:ro`, `${reports}:/roots/聊天记录月报:ro`]);
   check('layout: container starts', await waitUp(base));
   const report = '/聊天记录月报/2026-09/月报_2026-09.md';
   const text = fs.readFileSync(path.join(reports, '2026-09', '月报_2026-09.md'), 'utf8');
@@ -178,11 +181,11 @@ async function layoutMode() {
 }
 
 async function onMode() {
-  const base = 'http://127.0.0.1:18091';
+  const base = 'http://127.0.0.1:' + (PORT + 1);
   const pw = crypto.randomBytes(12).toString('base64url');
   const hash = execFileSync('docker', ['run', '--rm', '-i', IMAGE, 'node', 'packages/web/src/server/hash-password.js'], { input: pw + '\n', encoding: 'utf8' }).trim();
   check('on: hash helper prints a hash', hash.length > 40);
-  run('mdv-smoke-on', 18091, { MDV_AUTH: 'on', MDV_PASSWORD_HASH: hash });
+  run('mdv-smoke-on', PORT + 1, { MDV_AUTH: 'on', MDV_PASSWORD_HASH: hash });
   check('on: container starts', await waitUp(base));
   check('on: API 401 without login', (await fetch(base + '/api/state')).status === 401);
   check('on: raw 401 without login', (await fetch(base + '/raw' + enc(VOICE))).status === 401);

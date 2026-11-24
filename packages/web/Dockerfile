@@ -30,9 +30,11 @@ RUN npm ci --omit=dev --workspace @mdv/web && npm cache clean --force
 FROM ${NODE_IMAGE}
 # ffmpeg and the Intel media driver: on-demand H.264 transcoding (Quick Sync / VAAPI when
 # /dev/dri is passed in, software otherwise) for videos the browser cannot play.
+# The Intel driver exists only for x86-64; other architectures transcode in software.
+ARG TARGETARCH
 RUN sed -i 's/^Components: main$/Components: main non-free non-free-firmware/' /etc/apt/sources.list.d/debian.sources \
  && apt-get update \
- && apt-get install -y --no-install-recommends ffmpeg intel-media-va-driver-non-free tini \
+ && apt-get install -y --no-install-recommends ffmpeg tini $([ "${TARGETARCH:-amd64}" = amd64 ] && echo intel-media-va-driver-non-free) \
  && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=deps /app/node_modules node_modules
