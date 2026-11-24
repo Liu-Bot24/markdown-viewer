@@ -91,7 +91,7 @@ const steps = [
     do: 'fvWait',
     kind: 'folder',
     settle: 1500,
-    expect: { layout: 'grid', total: 7, items: 6, chips: '📁 预览', years: '2019,2020,2021', imgsLoaded: 6, cols: { min: 7 }, status: '1 个文件夹 · 6 个文件', bodyWidth: { min: 1500 } },
+    expect: { layout: 'grid', total: 7, items: 6, chips: '📁 预览', years: '2019,2020,2021', imgsLoaded: 6, cols: { min: 7 }, status: '1 个文件夹 · 6 个文件', bodyWidth: { min: 1500 }, outlineShown: false, outlineButton: false },
     screenshot: true,
   },
   // a thumbnail opens the viewer, which steps through the folder by key and by button
@@ -106,6 +106,8 @@ const steps = [
   { name: 'esc', do: 'keys', keys: ['Escape'] },
   { name: 'viewer-closed', do: 'fvState', expect: { 'lb.open': false, kind: 'folder' } },
   { name: 'back-to-index', do: 'back', expect: { 'view.path': `${D}\\索引.md` } },
+  // a Markdown document has its outline again
+  { name: 'index-has-outline', do: 'fvState', expect: { kind: 'doc', outlineShown: true, outlineButton: true } },
 
   // audio plays in its row; a same-named .txt is shown as its transcript, not as a row of its own
   { name: 'click-voice-link', do: 'mouse', selector: LINK(2), settle: 300 },
@@ -122,7 +124,7 @@ const steps = [
   { name: 'back-to-files', do: 'back' },
   { name: 'files-again', do: 'fvWait', kind: 'folder', expect: { items: 3 } },
   { name: 'click-page', do: 'mouse', selector: '.doc-root.active .fv-row[data-kind="html"]', settle: 300 },
-  { name: 'page-view', do: 'fvWait', kind: 'file', settle: 1000, expect: { frame: true, sandbox: '', title: 'page.html - MD Viewer' }, screenshot: true },
+  { name: 'page-view', do: 'fvWait', kind: 'file', settle: 1000, expect: { frame: true, sandbox: '', title: 'page.html - MD Viewer', outlineShown: false }, screenshot: true },
 
   // the message that sent a picture: from the viewer, and from the folder page's menu
   write('聊天记录\\2019-02_001.md', volume('2019-02', [msg(A1, '2019-02-12 14:22:01', '张三', '图片', '../图片/' + pics[0])])),
@@ -176,12 +178,12 @@ const steps = [
   // a narrow reading pane drops a row's date, then its size; the file name always keeps room
   { name: 'voice-wide-rows', do: 'fvWait', kind: 'folder', expect: { path: `${D}\\语音`, datesShown: 2, sizesShown: 2, nameMinWidth: { min: 150 } } },
   { name: 'window-medium', do: 'windowSize', width: 1000, height: 900 },
-  { name: 'medium-rows-drop-date', do: 'fvState', expect: { datesShown: 0, sizesShown: 2, nameMinWidth: { min: 100 }, bodyWidth: { min: 361, max: 540 } } },
+  { name: 'medium-rows-all-shown', do: 'fvState', expect: { datesShown: 2, sizesShown: 2, nameMinWidth: { min: 150 }, bodyWidth: { min: 541 }, outlineShown: false } },
   { name: 'window-narrow', do: 'windowSize', width: 780, height: 900 },
-  { name: 'narrow-rows-keep-names', do: 'fvState', expect: { datesShown: 0, sizesShown: 0, nameMinWidth: { min: 60 }, bodyWidth: { max: 360 } }, screenshot: true },
-  // the smallest window, sidebar and outline still open: the name still shows its start
+  { name: 'narrow-rows-drop-date', do: 'fvState', expect: { datesShown: 0, sizesShown: 2, nameMinWidth: { min: 100 }, bodyWidth: { min: 361, max: 540 } }, screenshot: true },
+  // the smallest window with the sidebar open: the name still shows its start
   { name: 'window-smallest', do: 'windowSize', width: 640, height: 900 },
-  { name: 'smallest-rows-keep-names', do: 'fvState', expect: { datesShown: 0, sizesShown: 0, nameMinWidth: { min: 30 } }, screenshot: true },
+  { name: 'smallest-rows-keep-names', do: 'fvState', expect: { datesShown: 0, sizesShown: 0, nameMinWidth: { min: 30 }, bodyWidth: { max: 360 } }, screenshot: true },
   { name: 'window-wide-again', do: 'windowSize', width: 2400, height: 1300, settle: 600 },
   { name: 'wide-rows-again', do: 'fvState', expect: { datesShown: 2, sizesShown: 2 } },
 ];

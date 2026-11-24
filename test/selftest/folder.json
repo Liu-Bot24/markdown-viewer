@@ -136,7 +136,9 @@
     "status": "1 个文件夹 · 6 个文件",
     "bodyWidth": {
      "min": 1500
-    }
+    },
+    "outlineShown": false,
+    "outlineButton": false
    },
    "screenshot": true
   },
@@ -225,6 +227,15 @@
    "do": "back",
    "expect": {
     "view.path": "${tmp}\\fv\\索引.md"
+   }
+  },
+  {
+   "name": "index-has-outline",
+   "do": "fvState",
+   "expect": {
+    "kind": "doc",
+    "outlineShown": true,
+    "outlineButton": true
    }
   },
   {
@@ -325,7 +336,8 @@
    "expect": {
     "frame": true,
     "sandbox": "",
-    "title": "page.html - MD Viewer"
+    "title": "page.html - MD Viewer",
+    "outlineShown": false
    },
    "screenshot": true
   },
@@ -677,7 +689,28 @@
    "height": 900
   },
   {
-   "name": "medium-rows-drop-date",
+   "name": "medium-rows-all-shown",
+   "do": "fvState",
+   "expect": {
+    "datesShown": 2,
+    "sizesShown": 2,
+    "nameMinWidth": {
+     "min": 150
+    },
+    "bodyWidth": {
+     "min": 541
+    },
+    "outlineShown": false
+   }
+  },
+  {
+   "name": "window-narrow",
+   "do": "windowSize",
+   "width": 780,
+   "height": 900
+  },
+  {
+   "name": "narrow-rows-drop-date",
    "do": "fvState",
    "expect": {
     "datesShown": 0,
@@ -688,26 +721,6 @@
     "bodyWidth": {
      "min": 361,
      "max": 540
-    }
-   }
-  },
-  {
-   "name": "window-narrow",
-   "do": "windowSize",
-   "width": 780,
-   "height": 900
-  },
-  {
-   "name": "narrow-rows-keep-names",
-   "do": "fvState",
-   "expect": {
-    "datesShown": 0,
-    "sizesShown": 0,
-    "nameMinWidth": {
-     "min": 60
-    },
-    "bodyWidth": {
-     "max": 360
     }
    },
    "screenshot": true
@@ -726,6 +739,9 @@
     "sizesShown": 0,
     "nameMinWidth": {
      "min": 30
+    },
+    "bodyWidth": {
+     "max": 360
     }
    },
    "screenshot": true

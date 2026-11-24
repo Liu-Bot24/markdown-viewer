@@ -443,6 +443,9 @@ export function install(app) {
           current: (() => { const c = document.querySelector('.tree-item.current .tree-label'); return c ? c.textContent : ''; })(),
         },
         tabs: app.tabs.tabs.length,
+        // the outline panel and its button take room on screen
+        outlineShown: getComputedStyle(document.getElementById('outline')).display !== 'none',
+        outlineButton: getComputedStyle(document.getElementById('btn-outline')).display !== 'none',
       };
       if (v && v.kind === 'folder') {
         const imgs = [...v.body.querySelectorAll('img')];

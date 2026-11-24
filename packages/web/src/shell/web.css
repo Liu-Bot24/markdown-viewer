@@ -412,6 +412,10 @@ body.phone #outline {
   right: 0;
   transform: translateX(105%);
 }
+/* folder pages and plain file views have no outline, so no drawer for it either */
+body.phone.outline-unused #outline {
+  display: none !important;
+}
 body.phone.drawer-left #sidebar,
 body.phone.drawer-right #outline {
   transform: none;

@@ -399,6 +399,8 @@ class App {
     $('#btn-chatview').style.display = view && view.meta && view.meta.isChat && view.mode !== 'edit' ? '' : 'none';
     this.renderBreadcrumb(view);
     this.renderChrome(view);
+    // folder pages and plain file views never have an outline: give their width to the page
+    document.body.classList.toggle('outline-unused', !view || view.kind !== 'doc');
     const key = view ? view.id + ':' + view.renderSeq : null;
     if (key !== this.outlineFor) {
       this.outlineFor = key;

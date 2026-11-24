@@ -334,6 +334,12 @@ body.no-outline #outline,
 body.no-outline .resizer[data-for='outline'] {
   display: none;
 }
+/* folder pages and plain file views: no outline anywhere, the phone drawer and its button included */
+body.outline-unused #outline,
+body.outline-unused .resizer[data-for='outline'],
+body.outline-unused #btn-outline {
+  display: none !important;
+}
 .resizer {
   width: 5px;
   margin: 0 -2px;
