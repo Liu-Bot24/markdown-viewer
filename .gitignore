@@ -10,6 +10,9 @@ test/output/
 test/private-fixtures/
 test/fixtures/large/
 
+# a local web deployment made from packages/web/compose.example.yaml (own paths, password hash)
+packages/web/compose.yaml
+
 # planning notes and the local privacy deny list (private terms, never published)
 docs/
 .privacy-denylist

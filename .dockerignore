@@ -18,3 +18,4 @@ AGENTS.md
 assets/*
 !assets/icon.png
 packages/*/test
+packages/web/compose.yaml

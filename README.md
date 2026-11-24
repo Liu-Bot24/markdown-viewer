@@ -184,15 +184,28 @@ Windows 不允许程序自己把自己设为默认打开方式。使用 `-Associ
 
 ### 部署
 
-镜像从仓库根目录构建：
+网页版从源码构建镜像，用 Docker Compose 部署。在 NAS 或服务器上 `git clone` 本仓库，然后：
+
+1. 把 [`packages/web/compose.example.yaml`](packages/web/compose.example.yaml) 复制为同一文件夹里的 `compose.yaml`，把其中的 `<…>` 换成自己的值：要映射的目录见下面第一张表，环境变量见第二张表。`compose.yaml` 不纳入版本库。
+2. 在 `packages/web` 文件夹里运行：
+
+   ```bash
+   docker compose up -d --build
+   ```
+
+   这条命令先从源码构建镜像 `mdview-web:1.0.0`，再创建并启动容器。之后更新了源码，再运行同一条命令，就会重新构建并替换容器；设置和索引保存在 `/state` 映射的目录里，不受影响。日志用 `docker compose logs -f` 查看，停止并删除容器用 `docker compose down`。
+
+不用 Compose 时，在仓库根目录构建镜像，再用 `docker run` 或 NAS 的容器管理界面按同样的映射和环境变量创建容器：
 
 ```bash
 docker build -f packages/web/Dockerfile -t mdview-web:1.0.0 .
 ```
 
-基础镜像是官方 Node 镜像（`node:22-bookworm-slim`），默认从 AWS ECR Public 上的 Docker 官方镜像拉取。要改从 Docker Hub 拉取，加上 `--build-arg NODE_IMAGE=node:22-bookworm-slim`。
+如果 NAS 的界面只能粘贴一段 Compose 配置、不能从源码构建，就先用上面的命令构建镜像，再把配置里 `build:` 那三行删掉。
 
-[`packages/web/compose.example.yaml`](packages/web/compose.example.yaml) 是一个完整示例，把其中的 `<…>` 换成自己的值。需要映射三类目录：
+基础镜像是官方 Node 镜像（`node:22-bookworm-slim`），默认从 AWS ECR Public 上的 Docker 官方镜像拉取。要改从 Docker Hub 拉取，在 `docker build` 后面加上 `--build-arg NODE_IMAGE=node:22-bookworm-slim`；用 Compose 时，在 `build:` 下面加上 `args: { NODE_IMAGE: node:22-bookworm-slim }`。
+
+需要映射三类目录：
 
 | 容器内路径 | 用途 |
 | --- | --- |
@@ -210,7 +223,7 @@ docker build -f packages/web/Dockerfile -t mdview-web:1.0.0 .
 | 环境变量 | 默认值 | 含义 |
 | --- | --- | --- |
 | `MDV_AUTH` | `off` | `on` 时需要密码才能访问。没有设置 `MDV_PASSWORD_HASH` 时，日志里会打印一次性设置码，第一次访问时用它设置密码 |
-| `MDV_PASSWORD_HASH` | 无 | 密码的 scrypt 哈希，用 `docker run --rm -i mdview-web:1.0.0 node packages/web/src/server/hash-password.js` 生成（从标准输入读入密码） |
+| `MDV_PASSWORD_HASH` | 无 | 密码的 scrypt 哈希。镜像构建好之后（用 Compose 时先运行 `docker compose build`），用 `docker run --rm -i mdview-web:1.0.0 node packages/web/src/server/hash-password.js` 生成（从标准输入读入密码） |
 | `MDV_PUBLIC_URL` | 无 | 通过反向代理或隧道以 https 访问时填写对外地址，登录 Cookie 会加上 Secure |
 | `MDV_TRUSTED_PROXY` | 无 | 反向代理的地址；只有来自它的请求才读取 `X-Forwarded-For` |
 | `MDV_WRITABLE_ROOTS` | 无 | 允许覆盖原文件的根，逗号分隔；对应目录还必须以读写方式映射 |

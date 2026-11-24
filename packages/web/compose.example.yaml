@@ -1,8 +1,13 @@
-# Example deployment. Replace every <…> with your own values; nothing here is a default.
+# Example deployment. Copy it to compose.yaml in this folder, replace every <…> with your own values
+# (nothing here is a default), then run from this folder: docker compose up -d --build
 # Each folder mapped to /roots/<name> becomes one root in the tree.
 services:
   mdview:
     image: mdview-web:1.0.0
+    # Built from this repository; drop these lines when the image is already on the host.
+    build:
+      context: ../..
+      dockerfile: packages/web/Dockerfile
     container_name: mdview-web
     ports:
       - "<host port>:8080"
